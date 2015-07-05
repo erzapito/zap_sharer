@@ -26,7 +26,9 @@ server::server()
 }
 
 server::~server() {
-
+	if (run_thread) {
+		stop();
+	}
 }
 
 void server::configure(const std::string& address, const std::string& port) {
@@ -48,7 +50,15 @@ void server::run() {
   // have finished. While the server is running, there is always at least one
   // asynchronous operation outstanding: the asynchronous accept call waiting
   // for new incoming connections.
-  io_service_.run();
+  run_thread = new std::thread ([this](){
+	io_service_.run();
+  });
+}
+
+void server::stop() {
+	io_service_.stop();
+	run_thread->join();
+	run_thread = NULL;
 }
 
 void server::do_accept()

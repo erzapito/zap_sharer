@@ -20,6 +20,16 @@ int main(void) {
 	s.configure("0.0.0.0","9999");
 	s.run();
 
-	cout << "Hello World" << endl; /* prints Hello World */
+	std::thread main ([](){
+		while (true) {
+			char c = getchar();
+			if (c == 's') {
+				break;
+			}
+		}
+	});
+	main.join();
+
+	s.stop();
 	return 0;
 }

@@ -1,12 +1,10 @@
 #pragma once
 
-#include <boost/asio.hpp>
 #include "connection_manager.hpp"
 #include "request_handler.hpp"
 
-/*#include <string>
-#include "connection.hpp"
-*/
+#include <boost/asio.hpp>
+#include <thread>
 
 namespace zap {
 namespace sharer {
@@ -27,7 +25,9 @@ public:
  void configure(const std::string& address, const std::string& port);
 
   /// Run the server's io_service loop.
-  void run();
+ void run();
+
+ void stop();
 
 private:
   /// Perform an asynchronous accept operation.
@@ -53,6 +53,8 @@ private:
 
   /// The handler for all incoming requests.
   request_handler request_handler_;
+
+  std::thread * run_thread;
 };
 
 // namespace end
