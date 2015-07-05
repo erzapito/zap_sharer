@@ -1,6 +1,6 @@
 #pragma once
 
-//#include <string>
+#include <string>
 
 namespace zap {
 namespace sharer {
@@ -16,7 +16,6 @@ class request_handler
 public:
   request_handler(const request_handler&) = delete;
   request_handler& operator=(const request_handler&) = delete;
-  request_handler();
   ~request_handler();
 
   /// Construct with a directory containing files to be served.
