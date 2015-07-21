@@ -1,4 +1,7 @@
 #include "server.hpp"
+#include "static_request_handler.hpp"
+#include "plugin_request_handler.hpp"
+#include "notfound_request_handler.hpp"
 #include <utility>
 #include <memory>
 
@@ -7,13 +10,13 @@ namespace sharer {
 namespace gui {
 namespace web {
 
-server::server()
+server::server(zap::sharer::plugin_manager & plugin_manager_)
   : io_service_(),
     signals_(io_service_),
     acceptor_(io_service_),
     connection_manager_(),
     socket_(io_service_),
-    request_handler_("./extra/")
+	plugin_manager(plugin_manager_)
 {
   // Register to handle the signals that indicate when the server should exit.
   // It is safe to register for the same signal multiple times in a program,
@@ -23,11 +26,18 @@ server::server()
 #if defined(SIGQUIT)
   signals_.add(SIGQUIT);
 #endif // defined(SIGQUIT)
+
+  request_handlers.push_back(new static_request_handler("./extra/") );
+  request_handlers.push_back(new plugin_request_handler(plugin_manager_) );
+  request_handlers.push_back(new notfound_request_handler() );
 }
 
 server::~server() {
 	if (run_thread) {
 		stop();
+	}
+	for (request_handler * h : request_handlers) {
+		delete h;
 	}
 }
 
@@ -76,7 +86,7 @@ void server::do_accept()
         if (!ec)
         {
           connection_manager_.start(std::make_shared<connection>(
-              std::move(socket_), connection_manager_, request_handler_));
+              std::move(socket_), connection_manager_, request_handlers));
         }
 
         do_accept();

@@ -9,6 +9,7 @@
  */
 
 #include "gui/web/server.hpp"
+#include "plugin_manager.hpp"
 
 #include <iostream>
 
@@ -16,8 +17,11 @@ using namespace std;
 
 int main(void) {
 
-	zap::sharer::gui::web::server s;
+	zap::sharer::plugin_manager plugin_manager;
+
+	zap::sharer::gui::web::server s (plugin_manager);
 	s.configure("0.0.0.0","9999");
+
 	s.run();
 
 	std::thread main ([](){

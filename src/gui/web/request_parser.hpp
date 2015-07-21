@@ -40,6 +40,8 @@ public:
   }
 
 private:
+  static void parseRequestUri(request & req);
+
   /// Handle the next character of input.
   result_type consume(request& req, char input);
 

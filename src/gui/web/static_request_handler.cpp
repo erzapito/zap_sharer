@@ -1,31 +1,31 @@
-#include "request_handler.hpp"
 #include "reply.hpp"
 #include "request.hpp"
 #include "mime_types.hpp"
 #include <fstream>
 #include <iostream>
+#include "static_request_handler.hpp"
 
 namespace zap {
 namespace sharer {
 namespace gui {
 namespace web {
 
-request_handler::request_handler(const std::string& doc_root)
+static_request_handler::static_request_handler(const std::string& doc_root)
   : doc_root_(doc_root)
 {
 }
 
-request_handler::~request_handler() {
+static_request_handler::~static_request_handler() {
 }
 
-void request_handler::handle_request(const request& req, reply& rep)
+bool static_request_handler::handle_request(const request& req, reply& rep)
 {
   // Decode url to path.
   std::string request_path;
   if (!url_decode(req.uri, request_path))
   {
     rep = reply::stock_reply(reply::bad_request);
-    return;
+    return true;
   }
 
   // Request path must be absolute and not contain "..".
@@ -33,7 +33,7 @@ void request_handler::handle_request(const request& req, reply& rep)
       || request_path.find("..") != std::string::npos)
   {
     rep = reply::stock_reply(reply::bad_request);
-    return;
+    return true;
   }
 
   // If path ends in slash (i.e. is a directory) then add "index.html".
@@ -56,9 +56,9 @@ void request_handler::handle_request(const request& req, reply& rep)
   std::ifstream is(full_path.c_str(), std::ios::in | std::ios::binary);
   if (!is)
   {
-	  std::cout << "File not found" << std::endl;
-    rep = reply::stock_reply(reply::not_found);
-    return;
+	  //std::cout << "File not found" << std::endl;
+    //rep = reply::stock_reply(reply::not_found);
+    return false;
   }
 
   // Fill out the reply to be sent to the client.
@@ -71,9 +71,10 @@ void request_handler::handle_request(const request& req, reply& rep)
   rep.headers[0].value = std::to_string(rep.content.size());
   rep.headers[1].name = "Content-Type";
   rep.headers[1].value = mime_types::extension_to_type(extension);
+  return true;
 }
 
-bool request_handler::url_decode(const std::string& in, std::string& out)
+bool static_request_handler::url_decode(const std::string& in, std::string& out)
 {
   out.clear();
   out.reserve(in.size());

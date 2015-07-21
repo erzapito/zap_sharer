@@ -10,13 +10,15 @@ namespace gui {
 namespace web {
 
 /// A request received from a client.
-struct request
+class request
 {
+public:
   std::string method;
-  std::string uri;
   int http_version_major;
   int http_version_minor;
   std::vector<header> headers;
+  std::vector<std::string> segments;
+  std::string uri;
 };
 
 } // namespace server

@@ -6,10 +6,10 @@ namespace gui {
 namespace web {
 
 connection::connection(boost::asio::ip::tcp::socket socket,
-    connection_manager& manager, request_handler& handler)
+    connection_manager& manager, std::vector<request_handler *>& handlers)
   : socket_(std::move(socket)),
     connection_manager_(manager),
-    request_handler_(handler)
+	request_handlers(handlers)
 {
 }
 
@@ -37,7 +37,11 @@ void connection::do_read()
 
           if (result == request_parser::good)
           {
-            request_handler_.handle_request(request_, reply_);
+        	  for (request_handler * h : request_handlers) {
+        		  if (h->handle_request(request_, reply_)) {
+        			  break;
+        		  }
+        	  }
             do_write();
           }
           else if (result == request_parser::bad)

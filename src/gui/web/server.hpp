@@ -1,10 +1,10 @@
 #pragma once
 
 #include "connection_manager.hpp"
-#include "request_handler.hpp"
-
 #include <boost/asio.hpp>
 #include <thread>
+#include "request_handler.hpp"
+#include "../../plugin_manager.hpp"
 
 namespace zap {
 namespace sharer {
@@ -15,14 +15,16 @@ namespace web {
 class server
 {
 public:
-  server();
+  server(zap::sharer::plugin_manager & plugin_manager);
   server(const server&) = delete;
   server& operator=(const server&) = delete;
   ~server();
 
   /// Construct the server to listen on the specified TCP address and port, and
   /// serve up files from the given directory.
- void configure(const std::string& address, const std::string& port);
+ void configure(
+		 const std::string& address,
+		 const std::string& port);
 
   /// Run the server's io_service loop.
  void run();
@@ -52,9 +54,11 @@ private:
   boost::asio::ip::tcp::socket socket_;
 
   /// The handler for all incoming requests.
-  request_handler request_handler_;
+  std::vector<request_handler *> request_handlers;
 
   std::thread * run_thread;
+
+  zap::sharer::plugin_manager & plugin_manager;
 };
 
 // namespace end

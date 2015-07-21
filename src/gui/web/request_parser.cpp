@@ -1,3 +1,5 @@
+#include <boost/algorithm/string.hpp>
+
 #include "request_parser.hpp"
 #include "request.hpp"
 
@@ -50,6 +52,7 @@ request_parser::result_type request_parser::consume(request& req, char input)
     if (input == ' ')
     {
       state_ = http_version_h;
+      parseRequestUri(req);
       return indeterminate;
     }
     else if (is_ctl(input))
@@ -301,6 +304,15 @@ bool request_parser::is_tspecial(int c)
 bool request_parser::is_digit(int c)
 {
   return c >= '0' && c <= '9';
+}
+
+void request_parser::parseRequestUri (request & req) {
+  int paramsIndex = req.uri.find('?');
+  int hashIndex = req.uri.find('?');
+  int pathEnd = (paramsIndex != -1) ? paramsIndex : ( (hashIndex != -1) ? hashIndex : req.uri.length() );
+  std::string path = req.uri.substr(0,pathEnd);
+
+  boost::split(req.segments, path, boost::is_any_of("/"));
 }
 
 }
