@@ -1,22 +1,17 @@
-/*
- ============================================================================
- Name        : ZapSharer.cpp
- Author      : 
- Version     :
- Copyright   : Your copyright notice
- Description : Hello World in C++,
- ============================================================================
- */
-
+#include "ZapSharer.hpp"
 #include "gui/web/server.hpp"
 #include "plugin_manager.hpp"
 
-#include <iostream>
+namespace zap {
+namespace sharer {
 
-using namespace std;
+ZapSharer::ZapSharer() {
+}
 
-int main(void) {
+ZapSharer::~ZapSharer() {
+}
 
+void ZapSharer::run() {
 	zap::sharer::plugin_manager plugin_manager;
 
 	zap::sharer::gui::web::server s (plugin_manager);
@@ -35,5 +30,7 @@ int main(void) {
 	main.join();
 
 	s.stop();
-	return 0;
+}
+
+}
 }
