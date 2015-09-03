@@ -9,8 +9,12 @@ SET(CMAKE_C_FLAGS="-g -O0 -Wall -W -fprofile-arcs -ftest-coverage")
 SET(CMAKE_EXE_LINKER_FLAGS="-fprofile-arcs -ftest-coverage")
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 
+ADD_DEFINITIONS ("${MHD_DEFINITIONS}")
+
 find_package(Boost 1.32 REQUIRED COMPONENTS system)
-find_package(Jsoncpp)
+find_package(Jsoncpp REQUIRED)
+find_package(LibMicroHTTPD REQUIRED)
+
 INCLUDE_DIRECTORIES( ${Boost_INCLUDE_DIR} ${Jsoncpp_INCLUDE_DIR} )
 
 add_subdirectory(src)

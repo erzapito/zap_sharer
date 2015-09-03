@@ -21,18 +21,18 @@ static_request_handler::~static_request_handler() {
 bool static_request_handler::handle_request(const request& req, reply& rep)
 {
   // Decode url to path.
-  std::string request_path;
-  if (!url_decode(req.uri, request_path))
+  std::string request_path (req.request_path);
+  /*if (!url_decode(req.uri, request_path))
   {
     rep = reply::stock_reply(reply::bad_request);
     return true;
-  }
+  }*/
 
   // Request path must be absolute and not contain "..".
   if (request_path.empty() || request_path[0] != '/'
       || request_path.find("..") != std::string::npos)
   {
-    rep = reply::stock_reply(reply::bad_request);
+	rep.status = 404;
     return true;
   }
 
@@ -56,13 +56,11 @@ bool static_request_handler::handle_request(const request& req, reply& rep)
   std::ifstream is(full_path.c_str(), std::ios::in | std::ios::binary);
   if (!is)
   {
-	  //std::cout << "File not found" << std::endl;
-    //rep = reply::stock_reply(reply::not_found);
     return false;
   }
 
   // Fill out the reply to be sent to the client.
-  rep.status = reply::ok;
+  rep.status = 200;
   char buf[512];
   while (is.read(buf, sizeof(buf)).gcount() > 0)
     rep.content.append(buf, is.gcount());

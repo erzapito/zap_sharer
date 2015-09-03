@@ -50,7 +50,7 @@ std::cout << "controller: " << controllerName << std::endl;
 	
     Json::StreamWriterBuilder wbuilder;
 	wbuilder["indentation"] = "\t";
-rep.status = reply::ok;
+    rep.status = 200;
 	rep.content = Json::writeString(wbuilder, root);
   rep.headers.resize(2);
   rep.headers[0].name = "Content-Length";

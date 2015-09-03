@@ -4,106 +4,82 @@
 #include "notfound_request_handler.hpp"
 #include <utility>
 #include <memory>
+#include <string.h>
+#include "reply.hpp"
 
 namespace zap {
 namespace sharer {
 namespace gui {
 namespace web {
 
-server::server(zap::sharer::plugin_manager & plugin_manager_)
-  : io_service_(),
-    signals_(io_service_),
-    acceptor_(io_service_),
-    connection_manager_(),
-    socket_(io_service_),
-	plugin_manager(plugin_manager_)
+static int
+answer_to_connection (void *cls, struct MHD_Connection *connection,
+                      const char *url, const char *method,
+                      const char *version, const char *upload_data,
+                      size_t *upload_data_size, void **con_cls)
 {
-  // Register to handle the signals that indicate when the server should exit.
-  // It is safe to register for the same signal multiple times in a program,
-  // provided all registration for the specified signal is made through Asio.
-  signals_.add(SIGINT);
-  signals_.add(SIGTERM);
-#if defined(SIGQUIT)
-  signals_.add(SIGQUIT);
-#endif // defined(SIGQUIT)
+  server * s = static_cast<server *>(cls);
+  return s->processRequest(connection, url, method, version, upload_data, upload_data_size);
+}
 
+
+server::server(zap::sharer::plugin_manager & plugin_manager_)
+  : plugin_manager(plugin_manager_)
+{
   request_handlers.push_back(new static_request_handler("./extra/") );
   request_handlers.push_back(new plugin_request_handler(plugin_manager_) );
   request_handlers.push_back(new notfound_request_handler() );
 }
 
 server::~server() {
-	if (run_thread) {
-		stop();
-	}
+	stop();
 	for (request_handler * h : request_handlers) {
 		delete h;
 	}
 }
 
 void server::configure(const std::string& address, const std::string& port) {
-  do_await_stop();
-
-  // Open the acceptor with the option to reuse the address (i.e. SO_REUSEADDR).
-  boost::asio::ip::tcp::resolver resolver(io_service_);
-  boost::asio::ip::tcp::endpoint endpoint = *resolver.resolve({address, port});
-  acceptor_.open(endpoint.protocol());
-  acceptor_.set_option(boost::asio::ip::tcp::acceptor::reuse_address(true));
-  acceptor_.bind(endpoint);
-  acceptor_.listen();
-
-  do_accept();
+  this->address = address;
+  this->port = port;
 }
 
 void server::run() {
-  // The io_service::run() call will block until all asynchronous operations
-  // have finished. While the server is running, there is always at least one
-  // asynchronous operation outstanding: the asynchronous accept call waiting
-  // for new incoming connections.
-  run_thread = new std::thread ([this](){
-	io_service_.run();
-  });
+  daemon = MHD_start_daemon (MHD_USE_SELECT_INTERNALLY, atoi( port.c_str() ), NULL, NULL,
+                             &answer_to_connection, this, MHD_OPTION_END);
 }
 
 void server::stop() {
-	io_service_.stop();
-	run_thread->join();
-	run_thread = NULL;
+  if (daemon) {
+    MHD_stop_daemon(daemon);
+    daemon = NULL;
+  }
 }
 
-void server::do_accept()
-{
-  acceptor_.async_accept(socket_,
-      [this](boost::system::error_code ec)
-      {
-        // Check whether the server was stopped by a signal before this
-        // completion handler had a chance to run.
-        if (!acceptor_.is_open())
-        {
-          return;
-        }
+int server::processRequest (struct MHD_Connection *connection,
+                      const char *url, const char *method,
+                      const char *version, const char *upload_data,
+                      size_t *upload_data_size) {
 
-        if (!ec)
-        {
-          connection_manager_.start(std::make_shared<connection>(
-              std::move(socket_), connection_manager_, request_handlers));
-        }
+  request request_ (method, version, url, upload_data, *upload_data_size);
+  reply reply_;
 
-        do_accept();
-      });
-}
+  for (request_handler * h : request_handlers) {
+	  if (h->handle_request(request_, reply_)) {
+		  break;
+	  }
+  }
 
-void server::do_await_stop()
-{
-  signals_.async_wait(
-      [this](boost::system::error_code /*ec*/, int /*signo*/)
-      {
-        // The server is stopped by cancelling all outstanding asynchronous
-        // operations. Once all operations have finished the io_service::run()
-        // call will exit.
-        acceptor_.close();
-        connection_manager_.stop_all();
-      });
+
+  struct MHD_Response *response = 
+  MHD_create_response_from_buffer (reply_.content.size(), (void *) reply_.content.c_str(), 
+				     MHD_RESPMEM_PERSISTENT);
+  for (int i = reply_.headers.size() - 1 ; i >= 0; i--) {
+    MHD_add_response_header (response, reply_.headers[i].name.c_str(), reply_.headers[i].value.c_str());
+  }  
+
+  int ret = MHD_queue_response (connection, reply_.status, response);
+  MHD_destroy_response (response);
+  return ret;
 }
 
 }

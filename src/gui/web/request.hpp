@@ -14,11 +14,20 @@ class request
 {
 public:
   std::string method;
-  int http_version_major;
-  int http_version_minor;
+  std::string http_version;
   std::vector<header> headers;
+  std::string request_path;
   std::vector<std::string> segments;
   std::string uri;
+  std::string content;
+
+  request (const char * method,
+	const char * version,
+	const char * url,
+	const char * content,
+    const size_t & content_size);
+private:
+  bool decodeUri();
 };
 
 } // namespace server

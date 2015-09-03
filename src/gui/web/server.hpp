@@ -1,10 +1,11 @@
 #pragma once
 
-#include "connection_manager.hpp"
-#include <boost/asio.hpp>
-#include <thread>
+//#include "connection_manager.hpp"
+//#include <boost/asio.hpp>
+//#include <thread>
 #include "request_handler.hpp"
 #include "../../plugin_manager.hpp"
+#include <microhttpd.h>
 
 namespace zap {
 namespace sharer {
@@ -31,8 +32,17 @@ public:
 
  void stop();
 
+  int processRequest (struct MHD_Connection *connection,
+                      const char *url, const char *method,
+                      const char *version, const char *upload_data,
+                      size_t *upload_data_size);
+
 private:
-  /// Perform an asynchronous accept operation.
+
+  std::string address;
+  std::string port;
+
+  /*/// Perform an asynchronous accept operation.
   void do_accept();
 
   /// Wait for a request to stop the server.
@@ -52,13 +62,15 @@ private:
 
   /// The next socket to be accepted.
   boost::asio::ip::tcp::socket socket_;
-
+*/
   /// The handler for all incoming requests.
   std::vector<request_handler *> request_handlers;
-
+/*
   std::thread * run_thread;
-
+*/
   zap::sharer::plugin_manager & plugin_manager;
+
+  struct MHD_Daemon *daemon;
 };
 
 // namespace end

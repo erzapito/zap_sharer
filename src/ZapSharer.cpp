@@ -2,6 +2,8 @@
 #include "gui/web/server.hpp"
 #include "plugin_manager.hpp"
 
+#include <thread>
+
 namespace zap {
 namespace sharer {
 

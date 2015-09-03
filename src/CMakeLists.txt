@@ -1,14 +1,14 @@
 add_library(gui_web
 	gui/web/server.cpp
-	gui/web/connection_manager.cpp
 	gui/web/static_request_handler.cpp
 	gui/web/notfound_request_handler.cpp
 	gui/web/plugin_request_handler.cpp
 	gui/web/request.cpp
-	gui/web/request_parser.cpp
-	gui/web/connection.cpp
-	gui/web/reply.cpp
 	gui/web/mime_types.cpp
+)
+
+target_link_libraries(gui_web
+    ${MHD_LIBRARIES}
 )
 
 add_library(ZapSharerCore
