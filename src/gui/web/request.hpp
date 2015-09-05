@@ -13,6 +13,29 @@ namespace web {
 class request
 {
 public:
+  request();
+  request (const char * method,
+	const char * version,
+	const char * url,
+	const char * content,
+    const size_t & content_size);
+
+  const std::string & getRequestPath() const {
+    return request_path;
+  }
+
+  const std::vector<std::string> & getSegments() const {
+    return segments;
+  }
+
+  bool isValid() const {
+    return valid;
+  }
+ 
+private:
+  bool decodeUri();
+
+  bool valid;
   std::string method;
   std::string http_version;
   std::vector<header> headers;
@@ -20,14 +43,6 @@ public:
   std::vector<std::string> segments;
   std::string uri;
   std::string content;
-
-  request (const char * method,
-	const char * version,
-	const char * url,
-	const char * content,
-    const size_t & content_size);
-private:
-  bool decodeUri();
 };
 
 } // namespace server

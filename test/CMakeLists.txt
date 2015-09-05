@@ -10,16 +10,16 @@ include(CodeCoverage)
 file(GLOB TEST_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} test*.cpp)
 
 #Run through each source
-foreach(testSrc ${TEST_SRCS})
+#foreach(testSrc ${TEST_SRCS})
         #Extract the filename without an extension (NAME_WE)
-        get_filename_component(testName ${testSrc} NAME_WE)
+        #get_filename_component(testName ${testSrc} NAME_WE)
 
         #Add compile target
-        add_executable(${testName} ${testSrc})
-		target_compile_features(${testName} PRIVATE cxx_range_for)
+        add_executable(ZAP_SHARER_TEST test_base.cpp)
+		target_compile_features(ZAP_SHARER_TEST PRIVATE cxx_range_for)
 
         #link to Boost libraries AND your targets and dependencies
-        target_link_libraries(${testName}
+        target_link_libraries(ZAP_SHARER_TEST
 			ZapSharerCore
 			gui_web
 			${Boost_LIBRARIES}
@@ -30,15 +30,15 @@ foreach(testSrc ${TEST_SRCS})
 		)
 
         #I like to move testing binaries into a testBin directory
-        set_target_properties(${testName} PROPERTIES 
+        set_target_properties(ZAP_SHARER_TEST PROPERTIES 
             RUNTIME_OUTPUT_DIRECTORY  ${CMAKE_CURRENT_SOURCE_DIR}/testBin)
 
         #Finally add it to test execution - 
         #Notice the WORKING_DIRECTORY and COMMAND
-        add_test(NAME ${testName} 
+        add_test(NAME ZAP_SHARER_TEST 
                  WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/testBin 
                  COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/testBin/${testName} )
 
-		setup_target_for_coverage(${PROJECT_NAME}_coverage ${testName} coverage)
+		setup_target_for_coverage(ZAP_SHARER_coverage ZAP_SHARER_TEST coverage)
 
-endforeach(testSrc)
+#endforeach(testSrc)

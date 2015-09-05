@@ -29,9 +29,6 @@ private:
   /// The directory containing the files to be served.
   std::string doc_root_;
 
-  /// Perform URL-decoding on a string. Returns false if the encoding was
-  /// invalid.
-  static bool url_decode(const std::string& in, std::string& out);
 };
 
 } // namespace server

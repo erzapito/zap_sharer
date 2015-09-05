@@ -1,6 +1,8 @@
 #include "request.hpp"
 #include <sstream>
 #include <string>
+#include <boost/algorithm/string.hpp>
+#include <iostream>
 
 namespace zap {
 namespace sharer {
@@ -26,14 +28,22 @@ http_version(version),
 uri(url),
 content(content,content_size)
 {
-  decodeUri();
-
+  valid = decodeUri();
+  if (valid) {
+    std::vector<std::string> segs;
+    boost::split(segs, request_path, boost::is_any_of("/"));
+    for (auto & s : segs) {
+      if (!s.empty()) {
+        segments.push_back(s);
+      };
+    }
+  }
 }
 
 bool request::decodeUri()
 {
   std::string & in = this->uri;
-  std::string & out = this->request_path;
+  std::string out;
 
   out.clear();
   out.reserve(in.size());
@@ -69,6 +79,7 @@ bool request::decodeUri()
       out += in[i];
     }
   }
+  this->request_path = out;
   return true;
 }
 

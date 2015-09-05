@@ -21,7 +21,7 @@ static_request_handler::~static_request_handler() {
 bool static_request_handler::handle_request(const request& req, reply& rep)
 {
   // Decode url to path.
-  std::string request_path (req.request_path);
+  std::string request_path (req.getRequestPath());
   /*if (!url_decode(req.uri, request_path))
   {
     rep = reply::stock_reply(reply::bad_request);
@@ -69,45 +69,6 @@ bool static_request_handler::handle_request(const request& req, reply& rep)
   rep.headers[0].value = std::to_string(rep.content.size());
   rep.headers[1].name = "Content-Type";
   rep.headers[1].value = mime_types::extension_to_type(extension);
-  return true;
-}
-
-bool static_request_handler::url_decode(const std::string& in, std::string& out)
-{
-  out.clear();
-  out.reserve(in.size());
-  for (std::size_t i = 0; i < in.size(); ++i)
-  {
-    if (in[i] == '%')
-    {
-      if (i + 3 <= in.size())
-      {
-        int value = 0;
-        std::istringstream is(in.substr(i + 1, 2));
-        if (is >> std::hex >> value)
-        {
-          out += static_cast<char>(value);
-          i += 2;
-        }
-        else
-        {
-          return false;
-        }
-      }
-      else
-      {
-        return false;
-      }
-    }
-    else if (in[i] == '+')
-    {
-      out += ' ';
-    }
-    else
-    {
-      out += in[i];
-    }
-  }
   return true;
 }
 

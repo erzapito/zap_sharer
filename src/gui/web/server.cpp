@@ -72,7 +72,7 @@ int server::processRequest (struct MHD_Connection *connection,
 
   struct MHD_Response *response = 
   MHD_create_response_from_buffer (reply_.content.size(), (void *) reply_.content.c_str(), 
-				     MHD_RESPMEM_PERSISTENT);
+				     MHD_RESPMEM_MUST_COPY);
   for (int i = reply_.headers.size() - 1 ; i >= 0; i--) {
     MHD_add_response_header (response, reply_.headers[i].name.c_str(), reply_.headers[i].value.c_str());
   }  

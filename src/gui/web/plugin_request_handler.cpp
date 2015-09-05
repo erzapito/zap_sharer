@@ -30,35 +30,69 @@ bool plugin_request_handler::handle_request(const request& req, reply& rep) {
 
 std::cout << "PLUGIN: start" << std::endl;
 
-	const std::vector<std::string> & segments = req.segments;
+	const std::vector<std::string> & segments = req.getSegments();
     if (segments.empty()) {
 		return false;
 	}
 
-	const std::string & controllerName = segments[1];
+	const std::string & controllerName = segments[0];
 
 std::cout << "controller: " << controllerName << std::endl;
 
 	if (controllerName.compare("plugins")){
         return false;
     }
-	
-    Json::Value root;
-    root.append("A");
-    root.append("B");
-    root.append("C");
-	
-    Json::StreamWriterBuilder wbuilder;
-	wbuilder["indentation"] = "\t";
-    rep.status = 200;
-	rep.content = Json::writeString(wbuilder, root);
-  rep.headers.resize(2);
-  rep.headers[0].name = "Content-Length";
-  rep.headers[0].value = std::to_string(rep.content.size());
-  rep.headers[1].name = "Content-Type";
-  rep.headers[1].value = "application/json";
 
-    return true;
+    if (segments.size() == 1) {
+
+std::cout << "listing plugins" << std::endl;
+
+		std::vector<std::string> & names = plugin_manager.listPluginNames();
+	
+		Json::Value root;
+		for (int i = names.size() - 1; i >= 0; i--) {
+			root.append(names[i]);
+		}
+	
+		Json::StreamWriterBuilder wbuilder;
+		rep.status = 200;
+		rep.content = Json::writeString(wbuilder, root);
+	  rep.headers.resize(2);
+	  rep.headers[0].name = "Content-Length";
+	  rep.headers[0].value = std::to_string(rep.content.size());
+	  rep.headers[1].name = "Content-Type";
+	  rep.headers[1].value = "application/json";
+
+		return true;
+    } else {
+       const std::string & pluginName = segments[1];
+
+       zap::sharer::plugin * p = plugin_manager.getPluginByShortName( pluginName );
+       if (!p) {
+         rep.status = 404;
+         return true;
+       }
+       if (segments.size() == 2) {
+		Json::Value root;
+         std::vector<std::string> & actions = p->listActions();
+         for (int i = actions.size() - 1; i >= 0; i-- ) {
+			root.append(actions[i]);
+         }
+	
+		Json::StreamWriterBuilder wbuilder;
+		rep.status = 200;
+		rep.content = Json::writeString(wbuilder, root);
+	  rep.headers.resize(2);
+	  rep.headers[0].name = "Content-Length";
+	  rep.headers[0].value = std::to_string(rep.content.size());
+	  rep.headers[1].name = "Content-Type";
+	  rep.headers[1].value = "application/json";
+         rep.status = 200;
+         return true;
+       }
+       rep.status = 500;
+       return true;
+    }
 }
 
 }
