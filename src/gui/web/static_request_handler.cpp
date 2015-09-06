@@ -22,11 +22,6 @@ bool static_request_handler::handle_request(const request& req, reply& rep)
 {
   // Decode url to path.
   std::string request_path (req.getRequestPath());
-  /*if (!url_decode(req.uri, request_path))
-  {
-    rep = reply::stock_reply(reply::bad_request);
-    return true;
-  }*/
 
   // Request path must be absolute and not contain "..".
   if (request_path.empty() || request_path[0] != '/'

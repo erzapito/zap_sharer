@@ -10,3 +10,5 @@
 #include "test_plugin_manager.cpp"
 #include "test_mime_types.cpp"
 #include "test_request.cpp"
+#include "test_notfound_request_handler.cpp"
+#include "test_static_request_handler.cpp"

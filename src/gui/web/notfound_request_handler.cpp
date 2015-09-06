@@ -25,7 +25,6 @@ notfound_request_handler::~notfound_request_handler() {
 }
 
 bool notfound_request_handler::handle_request(const request& req, reply& rep) {
-  std::cout << "File not found" << std::endl;
   rep.status = 404;
   return true;
 }
