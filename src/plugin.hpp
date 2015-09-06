@@ -8,9 +8,8 @@ namespace sharer {
 
 class plugin {
 public:
-	virtual ~plugin() {};
-    virtual std::string & getName();
-	virtual std::vector<std::string> & listActions();
+    virtual std::string & getName() = 0;
+    virtual std::vector<std::string> & listActions() = 0;
 };
 
 }
