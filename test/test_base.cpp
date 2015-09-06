@@ -12,3 +12,4 @@
 #include "test_request.cpp"
 #include "test_notfound_request_handler.cpp"
 #include "test_static_request_handler.cpp"
+#include "test_plugin_request_handler.cpp"

@@ -27,43 +27,31 @@ plugin_request_handler::~plugin_request_handler() {
 }
 
 bool plugin_request_handler::handle_request(const request& req, reply& rep) {
-
-std::cout << "PLUGIN: start" << std::endl;
-
-	const std::vector<std::string> & segments = req.getSegments();
+    const std::vector<std::string> & segments = req.getSegments();
     if (segments.empty()) {
-		return false;
-	}
+        return false;
+    }
 
-	const std::string & controllerName = segments[0];
-
-std::cout << "controller: " << controllerName << std::endl;
-
-	if (controllerName.compare("plugins")){
+    const std::string & controllerName = segments[0];
+    if (controllerName.compare("plugins")){
         return false;
     }
 
     if (segments.size() == 1) {
-
-std::cout << "listing plugins" << std::endl;
-
-		std::vector<std::string> & names = plugin_manager.listPluginNames();
-	
-		Json::Value root;
-		for (int i = names.size() - 1; i >= 0; i--) {
-			root.append(names[i]);
-		}
-	
-		Json::StreamWriterBuilder wbuilder;
-		rep.status = 200;
-		rep.content = Json::writeString(wbuilder, root);
-	  rep.headers.resize(2);
-	  rep.headers[0].name = "Content-Length";
-	  rep.headers[0].value = std::to_string(rep.content.size());
-	  rep.headers[1].name = "Content-Type";
-	  rep.headers[1].value = "application/json";
-
-		return true;
+        std::vector<std::string> & names = plugin_manager.listPluginNames();
+        Json::Value root (Json::arrayValue);
+        for (int i = names.size() - 1; i >= 0; i--) {
+            root.append(names[i]);
+        }
+        Json::StreamWriterBuilder wbuilder;
+        rep.status = 200;
+        rep.content = Json::writeString(wbuilder, root);
+        rep.headers.resize(2);
+        rep.headers[0].name = "Content-Length";
+        rep.headers[0].value = std::to_string(rep.content.size());
+        rep.headers[1].name = "Content-Type";
+        rep.headers[1].value = "application/json";
+        return true;
     } else {
        const std::string & pluginName = segments[1];
 
