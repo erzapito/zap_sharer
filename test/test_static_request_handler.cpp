@@ -1,5 +1,8 @@
 #include "gui/web/static_request_handler.hpp"
 
+#define BOOST_TEST_DYN_LINK
+#include <boost/test/unit_test.hpp>
+
 using namespace zap::sharer::gui::web;
 
 BOOST_AUTO_TEST_CASE( static_request_handler__constructor ) {

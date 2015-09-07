@@ -1,6 +1,9 @@
 #include "ZapSharer.hpp"
 #include "plugin_manager.hpp"
 
+#define BOOST_TEST_DYN_LINK
+#include <boost/test/unit_test.hpp>
+
 using namespace zap::sharer;
 
 class dummy_plugin: public plugin {

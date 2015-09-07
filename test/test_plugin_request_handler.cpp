@@ -1,11 +1,33 @@
 #include "gui/web/plugin_request_handler.hpp"
 
+#define BOOST_TEST_DYN_LINK
+#include <boost/test/unit_test.hpp>
+
 using namespace zap::sharer::gui::web;
 using namespace zap::sharer;
 
+class dummy_plugin: public plugin {
+public:
+    std::string name;
+    std::vector<std::string> actions;
+    dummy_plugin(const char * n, const char * a1 = NULL, const char * a2 = NULL):name(n) {
+        if (a1)
+            actions.push_back(a1);
+        if (a2)
+            actions.push_back(a2);
+    }
+    
+    std::string & getName() {
+        return name;
+    }
+    std::vector<std::string> & listActions() {
+        return actions;
+    }
+};
+
 BOOST_AUTO_TEST_CASE( plugin_request_handler__constructor ) {
     
-    plugin_manager m;
+    zap::sharer::plugin_manager m;
     
     plugin_request_handler * h;
     h = new plugin_request_handler(m);
@@ -26,7 +48,7 @@ BOOST_AUTO_TEST_CASE( plugin_request_handler__handle_request__not_match) {
 }
 
 BOOST_AUTO_TEST_CASE( plugin_request_handler__handle_request__plugin_listing__empty) {
-    plugin_manager m;
+    zap::sharer::plugin_manager m;
     plugin_request_handler h (m);
     reply _r;
     bool res;
@@ -46,7 +68,7 @@ BOOST_AUTO_TEST_CASE( plugin_request_handler__handle_request__plugin_listing__no
     plugin * p1 = new dummy_plugin("p1");
     plugin * p2 = new dummy_plugin("p2");
     
-    plugin_manager m;
+    zap::sharer::plugin_manager m;
     m.addPlugin(p1);
     m.addPlugin(p2);
     plugin_request_handler h (m);
@@ -68,7 +90,7 @@ BOOST_AUTO_TEST_CASE( plugin_request_handler__handle_request__plugin_actions__no
     plugin * p1 = new dummy_plugin("p1");
     plugin * p2 = new dummy_plugin("p2");
     
-    plugin_manager m;
+    zap::sharer::plugin_manager m;
     m.addPlugin(p1);
     m.addPlugin(p2);
     
@@ -85,7 +107,7 @@ BOOST_AUTO_TEST_CASE( plugin_request_handler__handle_request__plugin_actions__em
     plugin * p1 = new dummy_plugin("p1");
     plugin * p2 = new dummy_plugin("p2");
     
-    plugin_manager m;
+    zap::sharer::plugin_manager m;
     m.addPlugin(p1);
     m.addPlugin(p2);
     
@@ -108,7 +130,7 @@ BOOST_AUTO_TEST_CASE( plugin_request_handler__handle_request__plugin_actions__no
     plugin * p1 = new dummy_plugin("p1","act1","act2");
     plugin * p2 = new dummy_plugin("p2");
     
-    plugin_manager m;
+    zap::sharer::plugin_manager m;
     m.addPlugin(p1);
     m.addPlugin(p2);
     
@@ -131,7 +153,7 @@ BOOST_AUTO_TEST_CASE( plugin_request_handler__handle_request__wrong_request) {
     plugin * p1 = new dummy_plugin("p1","act1","act2");
     plugin * p2 = new dummy_plugin("p2");
     
-    plugin_manager m;
+    zap::sharer::plugin_manager m;
     m.addPlugin(p1);
     m.addPlugin(p2);
     

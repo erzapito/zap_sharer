@@ -15,13 +15,14 @@ file(GLOB TEST_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} test*.cpp)
         #get_filename_component(testName ${testSrc} NAME_WE)
 
         #Add compile target
-        add_executable(ZAP_SHARER_TEST test_base.cpp)
+        add_executable(ZAP_SHARER_TEST ${TEST_SRCS})
 		target_compile_features(ZAP_SHARER_TEST PRIVATE cxx_range_for)
 
         #link to Boost libraries AND your targets and dependencies
         target_link_libraries(ZAP_SHARER_TEST
 			ZapSharerCore
 			gui_web
+                        edonkey_plugin
 			${Boost_LIBRARIES}
 			${Boost_SYSTEM_LIBRARY}
 			${Jsoncpp_LIBRARY}

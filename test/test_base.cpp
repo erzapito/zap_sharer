@@ -1,15 +1,3 @@
-//Link to Boost
- #define BOOST_TEST_DYN_LINK
-
-//Define our Module name (prints at testing)
- #define BOOST_TEST_MODULE "BaseClassModule"
-
-//VERY IMPORTANT - include this last
+#define BOOST_TEST_DYN_LINK
+#define BOOST_TEST_MODULE Main
 #include <boost/test/unit_test.hpp>
-
-#include "test_plugin_manager.cpp"
-#include "test_mime_types.cpp"
-#include "test_request.cpp"
-#include "test_notfound_request_handler.cpp"
-#include "test_static_request_handler.cpp"
-#include "test_plugin_request_handler.cpp"

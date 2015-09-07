@@ -7,6 +7,10 @@ add_library(gui_web
 	gui/web/mime_types.cpp
 )
 
+add_library(edonkey_plugin
+    edonkey/edonkey_plugin.cpp
+)
+
 target_link_libraries(gui_web
     ${MHD_LIBRARIES}
 )
@@ -20,12 +24,14 @@ add_executable(ZapSharer
 	main.cpp
 )
 
+target_compile_features(edonkey_plugin PRIVATE cxx_range_for)
 target_compile_features(gui_web PRIVATE cxx_range_for)
 target_compile_features(ZapSharerCore PRIVATE cxx_range_for)
 target_compile_features(ZapSharer PRIVATE cxx_range_for)
 target_link_libraries(ZapSharer
 	ZapSharerCore
 	gui_web
+        edonkey_plugin
 	${Boost_SYSTEM_LIBRARY}
 	${Jsoncpp_LIBRARY}
 	pthread

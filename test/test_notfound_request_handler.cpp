@@ -1,5 +1,8 @@
 #include "gui/web/notfound_request_handler.hpp"
 
+#define BOOST_TEST_DYN_LINK
+#include <boost/test/unit_test.hpp>
+
 using namespace zap::sharer::gui::web;
 
 BOOST_AUTO_TEST_CASE( notfound_request_handler_constructor ) {
