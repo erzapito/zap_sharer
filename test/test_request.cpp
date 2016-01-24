@@ -1,4 +1,5 @@
 #include "gui/web/request.hpp"
+#include "test_commons.hpp"
 
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>
@@ -6,6 +7,7 @@
 using namespace zap::sharer::gui::web;
 
 BOOST_AUTO_TEST_CASE( request_decodeUri ) {
+  TEST_LOG("::request_decodeUri");
   request r("GET","HTTP 1.1","/con/act/id?name=st%C3%A5le&car=sa+ab","",0);
   BOOST_CHECK_EQUAL(true,r.isValid());
   BOOST_CHECK_EQUAL(3,r.getSegments().size());

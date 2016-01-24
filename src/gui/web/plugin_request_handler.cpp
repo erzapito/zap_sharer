@@ -38,7 +38,7 @@ bool plugin_request_handler::handle_request(const request& req, reply& rep) {
     }
 
     if (segments.size() == 1) {
-        std::vector<std::string> & names = plugin_manager.listPluginNames();
+        const std::vector<std::string> & names = plugin_manager.listPluginNames();
         Json::Value root (Json::arrayValue);
         for (int i = names.size() - 1; i >= 0; i--) {
             root.append(names[i]);
@@ -63,7 +63,7 @@ bool plugin_request_handler::handle_request(const request& req, reply& rep) {
         }
         if (segments.size() == 2) {
             Json::Value root (Json::arrayValue);
-            std::vector<std::string> & actions = p->listActions();
+            const std::vector<std::string> & actions = p->listActions();
             for (int i = actions.size() - 1; i >= 0; i-- ) {
                 root.append(actions[i]);
             }

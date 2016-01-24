@@ -1,4 +1,5 @@
 #include "gui/web/plugin_request_handler.hpp"
+#include "test_commons.hpp"
 
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>
@@ -26,7 +27,7 @@ public:
 };
 
 BOOST_AUTO_TEST_CASE( plugin_request_handler__constructor ) {
-    
+  TEST_LOG("::plugin_request_handler__constructor");
     zap::sharer::plugin_manager m;
     
     plugin_request_handler * h;
@@ -35,6 +36,7 @@ BOOST_AUTO_TEST_CASE( plugin_request_handler__constructor ) {
 }
 
 BOOST_AUTO_TEST_CASE( plugin_request_handler__handle_request__not_match) {
+  TEST_LOG("::plugin_request_handler__handle_request__not_match");
     plugin_manager m;
     plugin_request_handler h (m);
     reply _r;
@@ -48,6 +50,7 @@ BOOST_AUTO_TEST_CASE( plugin_request_handler__handle_request__not_match) {
 }
 
 BOOST_AUTO_TEST_CASE( plugin_request_handler__handle_request__plugin_listing__empty) {
+  TEST_LOG("::plugin_request_handler__handle_request__plugin_listing__empty");
     zap::sharer::plugin_manager m;
     plugin_request_handler h (m);
     reply _r;
@@ -65,6 +68,7 @@ BOOST_AUTO_TEST_CASE( plugin_request_handler__handle_request__plugin_listing__em
 }
 
 BOOST_AUTO_TEST_CASE( plugin_request_handler__handle_request__plugin_listing__non_empty) {
+TEST_LOG("::plugin_request_handler__handle_request__plugin_listing__non_empty");
     plugin * p1 = new dummy_plugin("p1");
     plugin * p2 = new dummy_plugin("p2");
     
@@ -87,6 +91,7 @@ BOOST_AUTO_TEST_CASE( plugin_request_handler__handle_request__plugin_listing__no
 }
 
 BOOST_AUTO_TEST_CASE( plugin_request_handler__handle_request__plugin_actions__not_found) {
+TEST_LOG("::plugin_request_handler__handle_request__plugin_actions__not_found");
     plugin * p1 = new dummy_plugin("p1");
     plugin * p2 = new dummy_plugin("p2");
     
@@ -104,6 +109,7 @@ BOOST_AUTO_TEST_CASE( plugin_request_handler__handle_request__plugin_actions__no
 }
 
 BOOST_AUTO_TEST_CASE( plugin_request_handler__handle_request__plugin_actions__empty) {
+TEST_LOG("::plugin_request_handler__handle_request__plugin_actions__empty");
     plugin * p1 = new dummy_plugin("p1");
     plugin * p2 = new dummy_plugin("p2");
     
@@ -127,6 +133,7 @@ BOOST_AUTO_TEST_CASE( plugin_request_handler__handle_request__plugin_actions__em
 }
 
 BOOST_AUTO_TEST_CASE( plugin_request_handler__handle_request__plugin_actions__non_empty) {
+TEST_LOG("::plugin_request_handler__handle_request__plugin_actions__non_empty");
     plugin * p1 = new dummy_plugin("p1","act1","act2");
     plugin * p2 = new dummy_plugin("p2");
     
@@ -150,6 +157,7 @@ BOOST_AUTO_TEST_CASE( plugin_request_handler__handle_request__plugin_actions__no
 }
 
 BOOST_AUTO_TEST_CASE( plugin_request_handler__handle_request__wrong_request) {
+TEST_LOG("::plugin_request_handler__handle_request__wrong_request");
     plugin * p1 = new dummy_plugin("p1","act1","act2");
     plugin * p2 = new dummy_plugin("p2");
     

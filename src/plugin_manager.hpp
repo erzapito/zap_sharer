@@ -15,7 +15,7 @@ public:
     plugin_manager& operator=(const plugin_manager&) = delete;
     ~plugin_manager();
 
-    std::vector<std::string> & listPluginNames();
+    const std::vector<std::string> & listPluginNames();
     plugin * getPluginByShortName(const std::string & name);
     
     void addPlugin(plugin * p);

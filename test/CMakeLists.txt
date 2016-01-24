@@ -23,11 +23,13 @@ file(GLOB TEST_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} test*.cpp)
 			ZapSharerCore
 			gui_web
                         edonkey_plugin
-			${Boost_LIBRARIES}
 			${Boost_SYSTEM_LIBRARY}
+                        ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
+                        ${Boost_LOG_LIBRARY}
 			${Jsoncpp_LIBRARY}
-			pthread
+                        ${SQLITE3_LIBRARY}
 			gcov
+                        pthread
 		)
 
         #I like to move testing binaries into a testBin directory

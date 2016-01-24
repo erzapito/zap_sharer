@@ -13,7 +13,7 @@ plugin_manager::~plugin_manager() {
     }
 }
 
-std::vector<std::string> & plugin_manager::listPluginNames() {
+const std::vector<std::string> & plugin_manager::listPluginNames() {
 	return currentPluginNames;
 }
 

@@ -1,5 +1,7 @@
 #include "ZapSharer.hpp"
 #include "plugin_manager.hpp"
+#define DISABLE_TEST_LOG
+#include "test_commons.hpp"
 
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>
@@ -27,12 +29,14 @@ public:
 
 BOOST_AUTO_TEST_CASE( plugin_manager__constructors )
 {
+  TEST_LOG("::plugin_manager__constructors");
   plugin_manager * manager = new plugin_manager();
   delete manager;
 }
 
 BOOST_AUTO_TEST_CASE( plugin_manager__getPluginByShortName__empty )
 {
+  TEST_LOG("::plugin_manager__getPluginByShortName__empty");
   zap::sharer::plugin_manager manager;
   zap::sharer::plugin * p = manager.getPluginByShortName("test");
   BOOST_CHECK_MESSAGE(p == NULL, "plugin should be null");
@@ -40,6 +44,7 @@ BOOST_AUTO_TEST_CASE( plugin_manager__getPluginByShortName__empty )
 
 BOOST_AUTO_TEST_CASE( plugin_manager__listPluginNames__empty )
 {
+  TEST_LOG("::plugin_manager__listPluginNames__empty");
   zap::sharer::plugin_manager manager;
   auto & names = manager.listPluginNames();
   BOOST_CHECK_MESSAGE(names.empty(), "plugin should be null");
@@ -47,6 +52,7 @@ BOOST_AUTO_TEST_CASE( plugin_manager__listPluginNames__empty )
 
 BOOST_AUTO_TEST_CASE( plugin_manager__listPluginNames__non_empty )
 {
+  TEST_LOG("::plugin_manager__listPluginNames__non_empty");
     plugin * p1 = new dummy_plugin("p1");
     plugin * p2 = new dummy_plugin("p2");
     
@@ -61,6 +67,7 @@ BOOST_AUTO_TEST_CASE( plugin_manager__listPluginNames__non_empty )
 
 BOOST_AUTO_TEST_CASE( plugin_manager__getPluginByShortName__non_empty )
 {
+  TEST_LOG("::plugin_manager__getPluginByShortName__non_empty");
     plugin * p1 = new dummy_plugin("p1");
     plugin * p2 = new dummy_plugin("p2");
     
