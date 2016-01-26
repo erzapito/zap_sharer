@@ -1,6 +1,5 @@
 #include "edonkey/edonkey_plugin.hpp"
 #include "db_wrapper_sqlite3.hpp"
-#include "test_commons.hpp"
 
 #include <boost/log/core.hpp>
 #include <boost/log/trivial.hpp>
@@ -16,33 +15,34 @@
 
 using namespace zap::sharer::edonkey;
 
-
+//#define TEST_LOG(x)  BOOST_LOG_TRIVIAL(debug)<<(x)<<std::endl
+#define TEST_LOG(x)
 
 BOOST_AUTO_TEST_CASE( edonkey_plugin__base ) {
 
-	boost::log::core::get()->set_filter (
-	    boost::log::trivial::severity >= boost::log::trivial::fatal
-	);
+    boost::log::core::get()->set_filter (
+        boost::log::trivial::severity >= boost::log::trivial::fatal
+    );
 
-  TEST_LOG("::edonkey_plugin__base");
+    TEST_LOG("::edonkey_plugin__base");
     zap::sharer::db_wrapper_sqlite3 db (":memory:");
     auto * p = new edonkey_plugin(&db);
     BOOST_CHECK_EQUAL("edonkey", p->getName());
     std::vector<std::string> & actions = p->listActions();
     BOOST_CHECK_EQUAL(0, actions.size());
     delete p;
-
-
-	boost::log::core::get()->set_filter (
-	    boost::log::trivial::severity >= boost::log::trivial::trace
-	);
-
 }
 
 BOOST_AUTO_TEST_CASE( edonkey_plugin__load_servers_met ) {
-	TEST_LOG("::edonkey_plugin__load_servers_met");
+
+    boost::log::core::get()->set_filter (
+        boost::log::trivial::severity >= boost::log::trivial::fatal  
+    );
+
+
+    TEST_LOG("::edonkey_plugin__load_servers_met");
     zap::sharer::db_wrapper_sqlite3 db (":memory:");
-	TEST_LOG("-> first load");
+    TEST_LOG("-> first load");
     auto * p = new edonkey_plugin(&db);
     p->loadServerMet("file:resources/server.met");
     {
@@ -58,7 +58,7 @@ BOOST_AUTO_TEST_CASE( edonkey_plugin__load_servers_met ) {
     delete p;
     
     // check servers are kept
-	TEST_LOG("-> second load");
+    TEST_LOG("-> second load");
     p = new edonkey_plugin(&db);
     {
         const std::vector<server_info> & servers = p->listServers();
@@ -74,17 +74,29 @@ BOOST_AUTO_TEST_CASE( edonkey_plugin__load_servers_met ) {
 }
 
 BOOST_AUTO_TEST_CASE( edonkey_plugin__load_servers_met__duplicate_server ) {
-  TEST_LOG("::edonkey_plugin__load_servers_met__duplicate_server");
+
+    boost::log::core::get()->set_filter (
+        boost::log::trivial::severity >= boost::log::trivial::fatal  
+    );
+
+
+    TEST_LOG("::edonkey_plugin__load_servers_met__duplicate_server");
     BOOST_FAIL("NOT IMPLEMENTED");
 }
 
 BOOST_AUTO_TEST_CASE( edonkey_plugin__load_servers_met__update_server ) {
-  TEST_LOG("::edonkey_plugin__load_servers_met__update_server");
+    boost::log::core::get()->set_filter (
+        boost::log::trivial::severity >= boost::log::trivial::fatal  
+    );
+    TEST_LOG("::edonkey_plugin__load_servers_met__update_server");
     BOOST_FAIL("NOT IMPLEMENTED");
 }
 
 BOOST_AUTO_TEST_CASE( edonkey_plugin__load_servers_met__not_existing ) {
-  TEST_LOG("::edonkey_plugin__load_servers_met__not_existing");
+    boost::log::core::get()->set_filter (
+        boost::log::trivial::severity >= boost::log::trivial::fatal  
+    );
+    TEST_LOG("::edonkey_plugin__load_servers_met__not_existing");
     zap::sharer::db_wrapper_sqlite3 db (":memory:");
     auto * p = new edonkey_plugin(&db);
     p->loadServerMet("file://resources/server.met2");
@@ -94,7 +106,10 @@ BOOST_AUTO_TEST_CASE( edonkey_plugin__load_servers_met__not_existing ) {
 }
 
 BOOST_AUTO_TEST_CASE( edonkey_plugin__load_servers_met__not_valid ) {
-  TEST_LOG("::edonkey_plugin__load_servers_met__not_valid");
+    boost::log::core::get()->set_filter (
+        boost::log::trivial::severity >= boost::log::trivial::fatal  
+    );
+    TEST_LOG("::edonkey_plugin__load_servers_met__not_valid");
     zap::sharer::db_wrapper_sqlite3 db (":memory:");
     auto * p = new edonkey_plugin(&db);
     p->loadServerMet("file://resources/server.met.bad");

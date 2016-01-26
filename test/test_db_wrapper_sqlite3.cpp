@@ -1,28 +1,28 @@
 #include "db_wrapper_sqlite3.hpp"
-#define DISABLE_TEST_LOG
-#include "test_commons.hpp"
 
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>
 
+//#define TEST_LOG(x)  BOOST_LOG_TRIVIAL(debug)<<(x)<<std::endl
+#define TEST_LOG(x)
 
 using namespace zap::sharer;
 
 BOOST_AUTO_TEST_CASE( db_wrapper_sqlite3__base ) {
-	TEST_LOG("::db_wrapper_sqlite3__base");
+    TEST_LOG("::db_wrapper_sqlite3__base");
     db_wrapper_sqlite3 * db = new db_wrapper_sqlite3(":memory:");
     delete db;
 }
 
 BOOST_AUTO_TEST_CASE( db_wrapper_sqlite3__01 ) {
-	TEST_LOG("::db_wrapper_sqlite3__01");
+    TEST_LOG("::db_wrapper_sqlite3__01");
     db_wrapper_sqlite3 * db = new db_wrapper_sqlite3(":memory:");
     db->execute("CREATE TABLE t1( id INTEGER PRIMARY KEY, field1 VARCHAR(55))");    
     delete db;
 }
 
 BOOST_AUTO_TEST_CASE( db_wrapper_sqlite3__1 ) {
-	TEST_LOG("::db_wrapper_sqlite3__1");
+    TEST_LOG("::db_wrapper_sqlite3__1");
     db_wrapper_sqlite3 * db = new db_wrapper_sqlite3(":memory:");
     db->execute("CREATE TABLE t1( id INTEGER PRIMARY KEY, field1 VARCHAR(55))");
     db->execute("CREATE TABLE t2( id INTEGER PRIMARY KEY, field2 VARCHAR(65))");

@@ -1,8 +1,10 @@
 #include "gui/web/plugin_request_handler.hpp"
-#include "test_commons.hpp"
 
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>
+
+//#define TEST_LOG(x)  BOOST_LOG_TRIVIAL(debug)<<(x)<<std::endl
+#define TEST_LOG(x)
 
 using namespace zap::sharer::gui::web;
 using namespace zap::sharer;
