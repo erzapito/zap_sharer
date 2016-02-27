@@ -1,4 +1,5 @@
 #include "gui/web/request.hpp"
+#define DISABLE_TEST_LOG
 #include "test_commons.hpp"
 
 #define BOOST_TEST_DYN_LINK

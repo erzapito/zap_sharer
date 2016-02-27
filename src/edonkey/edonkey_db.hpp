@@ -18,9 +18,9 @@ namespace zap {
 	 void addServerInfo(const server_info &i);
 	 void updateServerInfo(const server_info &i);
 	 void loadServerList(std::vector<server_info> & l);
+     int getCurrentVersion();
  private:
      zap::sharer::db_wrapper * db;
-     int getCurrentVersion();
      void init(int v);
 	 void initV1();
      void deleteCurrentTables();
