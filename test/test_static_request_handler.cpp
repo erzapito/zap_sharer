@@ -1,4 +1,5 @@
 #include "gui/web/static_request_handler.hpp"
+
 #define DISABLE_TEST_LOG
 #include "test_commons.hpp"
 

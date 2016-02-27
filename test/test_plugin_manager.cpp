@@ -1,12 +1,13 @@
 #include "ZapSharer.hpp"
 #include "plugin_manager.hpp"
-#define DISABLE_TEST_LOG
-#include "test_commons.hpp"
 
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>
 
 using namespace zap::sharer;
+
+#define DISABLE_TEST_LOG
+#include "test_commons.hpp"
 
 class dummy_plugin: public plugin {
 public:

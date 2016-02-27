@@ -1,16 +1,8 @@
 #include "edonkey/edonkey_plugin.hpp"
 #include "db_wrapper_sqlite3.hpp"
+
 #define DISABLE_TEST_LOG
 #include "test_commons.hpp"
-
-#include <boost/log/core.hpp>
-#include <boost/log/trivial.hpp>
-#include <boost/log/expressions.hpp>
-#include <boost/log/sinks/text_file_backend.hpp>
-#include <boost/log/utility/setup/file.hpp>
-#include <boost/log/utility/setup/common_attributes.hpp>
-#include <boost/log/sources/severity_logger.hpp>
-#include <boost/log/sources/record_ostream.hpp>
 
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>
@@ -25,18 +17,12 @@ BOOST_AUTO_TEST_CASE( edonkey_plugin__base ) {
     std::vector<std::string> & actions = p->listActions();
     BOOST_CHECK_EQUAL(0, actions.size());
     delete p;
-
-
-	boost::log::core::get()->set_filter (
-	    boost::log::trivial::severity >= boost::log::trivial::trace
-	);
-
 }
 
 BOOST_AUTO_TEST_CASE( edonkey_plugin__load_servers_met ) {
 	TEST_LOG("test_edonkey_plugin::edonkey_plugin__load_servers_met");
     zap::sharer::db_wrapper_sqlite3 db (":memory:");
-	TEST_LOG("-> first load");
+    TEST_LOG("-> first load");
     auto * p = new edonkey_plugin(&db);
     p->loadServerMet("file:resources/server.met");
     {
@@ -52,7 +38,7 @@ BOOST_AUTO_TEST_CASE( edonkey_plugin__load_servers_met ) {
     delete p;
     
     // check servers are kept
-	TEST_LOG("-> second load");
+    TEST_LOG("-> second load");
     p = new edonkey_plugin(&db);
     {
         const std::vector<server_info> & servers = p->listServers();
@@ -126,7 +112,7 @@ BOOST_AUTO_TEST_CASE( edonkey_plugin__load_servers_met__update_server ) {
 }
 
 BOOST_AUTO_TEST_CASE( edonkey_plugin__load_servers_met__not_existing ) {
-  TEST_LOG("test_edonkey_plugin::edonkey_plugin__load_servers_met__not_existing");
+    TEST_LOG("test_edonkey_plugin::edonkey_plugin__load_servers_met__not_existing");
     zap::sharer::db_wrapper_sqlite3 db (":memory:");
     auto * p = new edonkey_plugin(&db);
     p->loadServerMet("file://resources/server.met2");
@@ -136,7 +122,7 @@ BOOST_AUTO_TEST_CASE( edonkey_plugin__load_servers_met__not_existing ) {
 }
 
 BOOST_AUTO_TEST_CASE( edonkey_plugin__load_servers_met__not_valid ) {
-  TEST_LOG("test_edonkey_plugin::edonkey_plugin__load_servers_met__not_valid");
+    TEST_LOG("test_edonkey_plugin::edonkey_plugin__load_servers_met__not_valid");
     zap::sharer::db_wrapper_sqlite3 db (":memory:");
     auto * p = new edonkey_plugin(&db);
     p->loadServerMet("file://resources/server.met.bad");

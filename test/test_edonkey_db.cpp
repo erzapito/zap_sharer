@@ -1,5 +1,6 @@
 #include "edonkey/edonkey_db.hpp"
 #include "db_wrapper_sqlite3.hpp"
+
 #define DISABLE_TEST_LOG
 #include "test_commons.hpp"
 
