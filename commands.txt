@@ -1,2 +1,2 @@
 cmake -DCMAKE_BUILD_TYPE=Coverage
-make ZapSharer_coverage
+make ZAP_SHARER_coverage
