@@ -13,7 +13,6 @@ namespace zap {
             
             edonkey_db::edonkey_db(zap::sharer::db_wrapper * db): db(db) {
                 int version = getCurrentVersion();
-                BOOST_LOG_SEV(_logger,info) << "Current DB version: " << version;
                 if (version) {
                     update(version, edonkey_db::VERSION);
                 } else {
@@ -24,7 +23,6 @@ namespace zap {
             edonkey_db::edonkey_db(zap::sharer::db_wrapper * db, int version): db(db) {
 				
                 int currentVersion = getCurrentVersion();
-                BOOST_LOG_SEV(_logger,info) << "Current DB version: " << currentVersion << ", wanted: "<< version;
                 if (currentVersion && currentVersion != version) {
                     deleteCurrentTables();
                     init (version);
@@ -66,6 +64,7 @@ namespace zap {
 
 			void edonkey_db::deleteCurrentTables() {
 				db->execute("DROP TABLE IF EXISTS edonkey_option");
+				db->execute("DROP TABLE IF EXISTS edonkey_server");
 			};
 
 			void edonkey_db::initV1() {
@@ -77,9 +76,8 @@ namespace zap {
 				cursor->bind(1,1);
 				rc = cursor->execute();
 				if (rc != 1) {
-	                BOOST_LOG_SEV(_logger,error) << "Error inserting db_version #" << rc;
+				    BOOST_LOG_SEV(_logger,error) << "Error inserting db_version #" << rc;
 				}
-                BOOST_LOG_SEV(_logger,info) << "Version 1 init";
 			};
 
 			void edonkey_db::update(int from, int to) {

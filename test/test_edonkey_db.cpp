@@ -20,8 +20,8 @@ void checkEdonkeyDBTables(zap::sharer::db_wrapper_sqlite3 & db_w) {
     std::vector<std::string> names = db_w.listTables();
 
     BOOST_CHECK_EQUAL(3, names.size());
-	BOOST_CHECK_EQUAL("edonkey_option", names[0].c_str());
-	BOOST_CHECK_EQUAL("edonkey_server", names[2].c_str());
+    BOOST_CHECK_EQUAL("edonkey_option", names[0].c_str());
+    BOOST_CHECK_EQUAL("edonkey_server", names[2].c_str());
     {
         std::map<std::string, std::string> fields = db_w.listTableFields("edonkey_option");
         BOOST_CHECK_EQUAL(3, fields.size());
@@ -46,6 +46,19 @@ BOOST_AUTO_TEST_CASE( edonkey_db__init_v1 ) {
     edonkey_db db (&db_w, 1);
     
     checkEdonkeyDBTables(db_w);
+}
+
+BOOST_AUTO_TEST_CASE( edonkey_db__test_delete ) {
+    TEST_LOG("::edonkey_db_test_delete");
+    zap::sharer::db_wrapper_sqlite3 db_w (":memory:");
+
+    std::vector<std::string> names = db_w.listTables();
+    BOOST_CHECK_EQUAL(0, names.size());
+
+    edonkey_db db (&db_w, 1);
+    db.deleteCurrentTables();
+    names = db_w.listTables();
+    BOOST_CHECK_EQUAL(1, names.size());
 }
 
 BOOST_AUTO_TEST_CASE( edonkey_db__get_current_version ) {
