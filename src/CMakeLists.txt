@@ -1,4 +1,4 @@
-cmake_minimum_required (VERSION 3.2)
+cmake_minimum_required (VERSION 3.0)
 
 add_library(gui_web
 	gui/web/server.cpp
@@ -15,10 +15,6 @@ add_library(edonkey_plugin
     edonkey/edonkey_db.cpp
 )
 
-target_link_libraries(gui_web
-    ${MHD_LIBRARIES}
-)
-
 add_library(ZapSharerCore
     ZapSharer.cpp
     plugin_manager.cpp
@@ -29,13 +25,9 @@ add_executable(ZapSharer
 	main.cpp
 )
 
-target_compile_features(edonkey_plugin PRIVATE cxx_range_for)
-target_compile_features(gui_web PRIVATE cxx_range_for)
-target_compile_features(ZapSharerCore PRIVATE cxx_range_for)
-target_compile_features(ZapSharer PRIVATE cxx_range_for)
-
 target_link_libraries(gui_web
     ${Jsoncpp_LIBRARY}
+    ${MHD_LIBRARIES}
 )
 
 target_link_libraries(ZapSharerCore

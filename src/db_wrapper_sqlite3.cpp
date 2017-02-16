@@ -13,7 +13,6 @@ namespace zap {
     namespace sharer {
 
         db_wrapper_sqlite3::db_wrapper_sqlite3(const char* name) {
-            char *zErrMsg = 0;
             int rc;
 
             rc = sqlite3_open(name, &db);
@@ -86,7 +85,7 @@ namespace zap {
 			return new db_cursor_sqlite3(db, stmt);
         }
         
-		db_cursor_sqlite3::db_cursor_sqlite3 (sqlite3 * db, sqlite3_stmt * stmt): db(db), stmt(stmt) {};
+		db_cursor_sqlite3::db_cursor_sqlite3 (sqlite3 * _db, sqlite3_stmt * _stmt): db(_db), stmt(_stmt) {};
 
 		db_cursor_sqlite3::~db_cursor_sqlite3() {
 			sqlite3_finalize (stmt);

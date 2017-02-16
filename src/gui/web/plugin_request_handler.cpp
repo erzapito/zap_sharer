@@ -27,6 +27,8 @@ plugin_request_handler::~plugin_request_handler() {
 }
 
 bool plugin_request_handler::handle_request(const request& req, reply& rep) {
+
+    static Json::FastWriter jsonWriter;
     const std::vector<std::string> & segments = req.getSegments();
     if (segments.empty()) {
         return false;
@@ -43,10 +45,8 @@ bool plugin_request_handler::handle_request(const request& req, reply& rep) {
         for (int i = names.size() - 1; i >= 0; i--) {
             root.append(names[i]);
         }
-        Json::StreamWriterBuilder wbuilder;
-        wbuilder["indentation"] = "";
         rep.status = 200;
-        rep.content = Json::writeString(wbuilder, root);
+        rep.content = jsonWriter.write(root);
         rep.headers.resize(2);
         rep.headers[0].name = "Content-Length";
         rep.headers[0].value = std::to_string(rep.content.size());
@@ -67,11 +67,8 @@ bool plugin_request_handler::handle_request(const request& req, reply& rep) {
             for (int i = actions.size() - 1; i >= 0; i-- ) {
                 root.append(actions[i]);
             }
-	
-            Json::StreamWriterBuilder wbuilder;
-            wbuilder["indentation"] = "";
             rep.status = 200;
-            rep.content = Json::writeString(wbuilder, root);
+            rep.content = jsonWriter.write(root);
             rep.headers.resize(2);
             rep.headers[0].name = "Content-Length";
             rep.headers[0].value = std::to_string(rep.content.size());

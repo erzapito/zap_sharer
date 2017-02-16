@@ -86,14 +86,14 @@ namespace edonkey {
     }
     
     void edonkey_plugin::loadServerMet(const char * serverMetUrl) {
-        std::istream * s = NULL;
+        std::istream * serverMetStream = NULL;
         
         if (boost::starts_with(serverMetUrl,"file:")) {
-            s = new std::ifstream(serverMetUrl + 5, std::ios::in|std::ios::binary);
+            serverMetStream = new std::ifstream(serverMetUrl + 5, std::ios::in|std::ios::binary);
         }
         
-        if (s) {
-            auto readServerMetData = [] (std::istream & s, edonkey_plugin * plugin) {
+        if (serverMetStream) {
+            auto readServerMetData = [] (std::istream & s, edonkey_plugin * donkeyPlugin) {
                 uint8_t c8;
                 s.read((char *)&c8,sizeof(c8));
                 if (c8 != 0x0E) return;
@@ -102,7 +102,6 @@ namespace edonkey {
                 s.read((char *)&serverCount,sizeof(serverCount));
                 if (!s) return;
                 
-                std::vector<server_info> servers (serverCount);
                 while (serverCount-- > 0) {
                     server_info info;
                     
@@ -204,12 +203,12 @@ namespace edonkey {
                     }
                     
                     
-                    plugin->addServer(info);
+                    donkeyPlugin->addServer(info);
                     //delete[] name;
                 }
             };
-            readServerMetData(*s, this);
-            delete s;
+            readServerMetData(*serverMetStream, this);
+            delete serverMetStream;
         }
     }
     

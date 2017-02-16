@@ -23,8 +23,8 @@ class db_cursor_sqlite3: public db_cursor {
 		virtual void bind(int pos, const char * v);
 		virtual void bind(int pos, int v);
 	private:
-		sqlite3_stmt *stmt;
 		sqlite3 * db;
+		sqlite3_stmt *stmt;
 };
 
 class db_wrapper_sqlite3: public db_wrapper {
@@ -32,7 +32,7 @@ class db_wrapper_sqlite3: public db_wrapper {
         db_wrapper_sqlite3(const char * name);
         db_wrapper_sqlite3(const db_wrapper_sqlite3 & d);
         db_wrapper_sqlite3 & operator= (const db_wrapper_sqlite3 & db);
-        ~db_wrapper_sqlite3();
+        virtual ~db_wrapper_sqlite3();
         
         std::vector<std::string> listTables();
         std::map<std::string, std::string> listTableFields(const char * table);

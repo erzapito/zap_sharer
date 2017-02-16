@@ -16,7 +16,7 @@ static int
 answer_to_connection (void *cls, struct MHD_Connection *connection,
                       const char *url, const char *method,
                       const char *version, const char *upload_data,
-                      size_t *upload_data_size, void **con_cls)
+                      size_t *upload_data_size, void **con_cls __attribute__((unused)))
 {
   server * s = static_cast<server *>(cls);
   return s->processRequest(connection, url, method, version, upload_data, upload_data_size);
@@ -38,9 +38,9 @@ server::~server() {
 	}
 }
 
-void server::configure(const std::string& address, const std::string& port) {
-  this->address = address;
-  this->port = port;
+void server::configure(const std::string& _address, const std::string& _port) {
+  this->address = _address;
+  this->port = _port;
 }
 
 void server::run() {

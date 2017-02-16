@@ -9,16 +9,16 @@ namespace sharer {
 namespace gui {
 namespace web {
 
-request::request (const char * method,
+request::request (const char * _method,
 	const char * version,
 	const char * url,
-	const char * content,
+	const char * _content,
     const size_t & content_size)
 :
-method(method),
+method(_method),
 http_version(version),
 uri(url),
-content(content,content_size)
+content(_content,content_size)
 {
   valid = decodeUri();
   if (valid) {

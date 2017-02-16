@@ -24,7 +24,7 @@ notfound_request_handler::~notfound_request_handler() {
 	// nothing to do
 }
 
-bool notfound_request_handler::handle_request(const request& req, reply& rep) {
+bool notfound_request_handler::handle_request(const request& req __attribute__((unused)), reply& rep) {
   rep.status = 404;
   return true;
 }

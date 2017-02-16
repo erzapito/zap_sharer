@@ -4,14 +4,14 @@ namespace zap {
     namespace sharer {
         namespace edonkey {
             
-            server_info::server_info() {};
+		server_info::server_info() {};
                       
-            server_info::server_info(int id, const char * n, const char * d, uint32_t ip, uint16_t port):
-            id(id),
-            name(n),
-			description(d),
-			ip(ip),
-            port(port)
+		server_info::server_info(int _id, const char * n, const char * d, uint32_t _ip, uint16_t _port):
+		  id(_id),
+		  ip(_ip),
+		  port(_port),
+		  name(n),
+		  description(d)
             {};
 
             server_info::~server_info() {

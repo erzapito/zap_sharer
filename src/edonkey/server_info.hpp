@@ -33,8 +33,7 @@ namespace zap {
                 server_info(int id, const char * n, const char * d, uint32_t ip, uint16_t port);
                 ~server_info();
 
-				int id;
-                
+		int id;
                 uint32_t ip;
                 uint16_t port;
                 uint32_t str_users;

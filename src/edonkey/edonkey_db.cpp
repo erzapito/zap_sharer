@@ -11,7 +11,7 @@ namespace zap {
     namespace sharer {
         namespace edonkey {
             
-            edonkey_db::edonkey_db(zap::sharer::db_wrapper * db): db(db) {
+            edonkey_db::edonkey_db(zap::sharer::db_wrapper * _db): db(_db) {
                 int version = getCurrentVersion();
                 if (version) {
                     update(version, edonkey_db::VERSION);
@@ -20,7 +20,7 @@ namespace zap {
                 }
             }
             
-            edonkey_db::edonkey_db(zap::sharer::db_wrapper * db, int version): db(db) {
+            edonkey_db::edonkey_db(zap::sharer::db_wrapper * _db, int version): db(_db) {
 				
                 int currentVersion = getCurrentVersion();
                 if (currentVersion && currentVersion != version) {

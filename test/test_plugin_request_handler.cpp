@@ -61,10 +61,10 @@ BOOST_AUTO_TEST_CASE( plugin_request_handler__handle_request__plugin_listing__em
     res = h.handle_request(r,_r);
     BOOST_CHECK(res);
     BOOST_CHECK_EQUAL(200,_r.status);
-    BOOST_CHECK_EQUAL("[]",_r.content.c_str());
+    BOOST_CHECK_EQUAL("[]\n",_r.content.c_str());
     BOOST_CHECK_EQUAL(2,_r.headers.size());
     BOOST_CHECK_EQUAL("Content-Length",_r.headers[0].name);
-    BOOST_CHECK_EQUAL("2",_r.headers[0].value);
+    BOOST_CHECK_EQUAL("3",_r.headers[0].value);
     BOOST_CHECK_EQUAL("Content-Type",_r.headers[1].name);
     BOOST_CHECK_EQUAL("application/json",_r.headers[1].value);
 }
@@ -84,10 +84,10 @@ TEST_LOG("::plugin_request_handler__handle_request__plugin_listing__non_empty");
     res = h.handle_request(r,_r);
     BOOST_CHECK(res);
     BOOST_CHECK_EQUAL(200,_r.status);
-    BOOST_CHECK_EQUAL("[\"p2\",\"p1\"]",_r.content.c_str());
+    BOOST_CHECK_EQUAL("[\"p2\",\"p1\"]\n",_r.content.c_str());
     BOOST_CHECK_EQUAL(2,_r.headers.size());
     BOOST_CHECK_EQUAL("Content-Length",_r.headers[0].name);
-    BOOST_CHECK_EQUAL("11",_r.headers[0].value);
+    BOOST_CHECK_EQUAL("12",_r.headers[0].value);
     BOOST_CHECK_EQUAL("Content-Type",_r.headers[1].name);
     BOOST_CHECK_EQUAL("application/json",_r.headers[1].value);
 }
@@ -126,10 +126,10 @@ TEST_LOG("::plugin_request_handler__handle_request__plugin_actions__empty");
     res = h.handle_request(r,_r);
     BOOST_CHECK(res);
     BOOST_CHECK_EQUAL(200,_r.status);
-    BOOST_CHECK_EQUAL("[]",_r.content.c_str());
+    BOOST_CHECK_EQUAL("[]\n",_r.content.c_str());
     BOOST_CHECK_EQUAL(2,_r.headers.size());
     BOOST_CHECK_EQUAL("Content-Length",_r.headers[0].name);
-    BOOST_CHECK_EQUAL("2",_r.headers[0].value);
+    BOOST_CHECK_EQUAL("3",_r.headers[0].value);
     BOOST_CHECK_EQUAL("Content-Type",_r.headers[1].name);
     BOOST_CHECK_EQUAL("application/json",_r.headers[1].value);
 }
@@ -150,10 +150,10 @@ TEST_LOG("::plugin_request_handler__handle_request__plugin_actions__non_empty");
     res = h.handle_request(r,_r);
     BOOST_CHECK(res);
     BOOST_CHECK_EQUAL(200,_r.status);
-    BOOST_CHECK_EQUAL("[\"act2\",\"act1\"]",_r.content.c_str());
+    BOOST_CHECK_EQUAL("[\"act2\",\"act1\"]\n",_r.content.c_str());
     BOOST_CHECK_EQUAL(2,_r.headers.size());
     BOOST_CHECK_EQUAL("Content-Length",_r.headers[0].name);
-    BOOST_CHECK_EQUAL("15",_r.headers[0].value);
+    BOOST_CHECK_EQUAL("16",_r.headers[0].value);
     BOOST_CHECK_EQUAL("Content-Type",_r.headers[1].name);
     BOOST_CHECK_EQUAL("application/json",_r.headers[1].value);
 }

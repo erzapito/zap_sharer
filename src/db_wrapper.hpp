@@ -10,8 +10,9 @@ namespace zap {
         
         class db_cursor {
 public:
+			virtual ~db_cursor() {};
 			// query
-            virtual bool next() = 0;
+			virtual bool next() = 0;
 			virtual const char * getStringColumn(int c) = 0;
 			virtual int getIntColumn(int c) = 0;
 

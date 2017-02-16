@@ -12,6 +12,7 @@ namespace web {
 /// The common handler for all incoming requests.
 class request_handler {
 public:
+	virtual ~request_handler() {};
 	virtual bool handle_request(const request& req, reply& rep) = 0;
 };
 
