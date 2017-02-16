@@ -48,6 +48,19 @@ BOOST_AUTO_TEST_CASE( edonkey_db__init_v1 ) {
     checkEdonkeyDBTables(db_w);
 }
 
+BOOST_AUTO_TEST_CASE( edonkey_db__init_v_unknown ) {
+    TEST_LOG("::edonkey_db__init_v_unknown");
+    zap::sharer::db_wrapper_sqlite3 db_w (":memory:");
+    try {
+      edonkey_db db (&db_w, 9999);
+      BOOST_FAIL("Should fail on unknown database");
+    } catch (std::runtime_error & e) {
+	// PASSED
+    }
+    std::vector<std::string> names = db_w.listTables();
+    BOOST_CHECK_EQUAL(0, names.size());
+}
+
 BOOST_AUTO_TEST_CASE( edonkey_db__test_delete ) {
     TEST_LOG("::edonkey_db_test_delete");
     zap::sharer::db_wrapper_sqlite3 db_w (":memory:");
@@ -68,20 +81,4 @@ BOOST_AUTO_TEST_CASE( edonkey_db__get_current_version ) {
 	BOOST_CHECK_EQUAL(1, p->getCurrentVersion());
     delete p;
 }
-
-/*BOOST_AUTO_TEST_CASE( edonkey_db__update__from_v0 ) {
-    TEST_LOG("::edonkey_db__init_v1");
-    zap::sharer::db_wrapper_sqlite3 db_w (":memory:");
-	{
-    	edonkey_db * db = new edonkey_db (&db_w, 0);
-		delete db;
-	}
-	{
-    	edonkey_db * db = new edonkey_db (&db_w);
-		delete db;
-	}    
-
-    checkEdonkeyDBTables(db_w);
-}*/
-
 

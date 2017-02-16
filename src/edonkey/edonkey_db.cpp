@@ -23,10 +23,12 @@ namespace zap {
             edonkey_db::edonkey_db(zap::sharer::db_wrapper * _db, int version): db(_db) {
 				
                 int currentVersion = getCurrentVersion();
-                if (currentVersion && currentVersion != version) {
+                /*
+		 * As there is only version 1, this code is unreachable
+		if (currentVersion && currentVersion != version) {
                     deleteCurrentTables();
                     init (version);
-                } else if (!currentVersion) {
+                } else */ if (!currentVersion) {
                     init (version);
                 }
             }
