@@ -14,8 +14,9 @@ BOOST_AUTO_TEST_CASE( edonkey_plugin__base ) {
     zap::sharer::db_wrapper_sqlite3 db (":memory:");
     auto * p = new edonkey_plugin(&db);
     BOOST_CHECK_EQUAL("edonkey", p->getName());
-    std::vector<std::string> & actions = p->listActions();
-    BOOST_CHECK_EQUAL(0, actions.size());
+    const std::vector<std::string> & actions = p->listActions();
+    BOOST_CHECK_EQUAL(1, actions.size());
+    BOOST_CHECK_EQUAL("connect", actions[0]);
     delete p;
 }
 

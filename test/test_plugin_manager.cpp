@@ -26,6 +26,10 @@ public:
     virtual std::vector<std::string> & listActions() {
         return actions;
     }
+    
+    virtual void executeAction(const std::string & action __attribute__((unused))) {
+	// nothing to do
+    }
 };
 
 BOOST_AUTO_TEST_CASE( plugin_manager__constructors )

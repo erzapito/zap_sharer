@@ -26,6 +26,10 @@ public:
     std::vector<std::string> & listActions() {
         return actions;
     }
+    
+    void executeAction(const std::string & action){
+      action.c_str();
+    }
 };
 
 BOOST_AUTO_TEST_CASE( plugin_request_handler__constructor ) {

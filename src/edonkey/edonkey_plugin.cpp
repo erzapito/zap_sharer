@@ -3,31 +3,42 @@
 #include <boost/algorithm/string/predicate.hpp>
 #include <iostream>
 
+const std::string PLUGIN_NAME("edonkey");
+const char * CONNECT_ACTION = "connect";
+const std::vector<std::string> ACTIONS {
+  CONNECT_ACTION
+};
+
 namespace zap {
 namespace sharer {
 namespace edonkey {
 
     edonkey_plugin::edonkey_plugin(zap::sharer::db_wrapper * _db):
-    name("edonkey"),
     db(_db)
     {
-		db.loadServerList(servers);
-	}
-    
+	db.loadServerList(servers);
+    }
+
     edonkey_plugin::~edonkey_plugin() {
         // nothing to do
     }
     
-    std::string & edonkey_plugin::getName() {
-        return name;
+    const std::string & edonkey_plugin::getName() {
+        return PLUGIN_NAME;
     }
     
-    std::vector<std::string> & edonkey_plugin::listActions() {
-        return actions;
+    const std::vector<std::string> & edonkey_plugin::listActions() {
+        return ACTIONS;
     }
     
     const std::vector<server_info> & edonkey_plugin::listServers() const {
         return servers;
+    }
+    
+    void edonkey_plugin::executeAction(const std::string & action) {
+	if (action == CONNECT_ACTION) {
+	    connect();
+	}
     }
     
     void edonkey_plugin::addServer(server_info& info) {
@@ -85,11 +96,15 @@ namespace edonkey {
         
     }
     
-    void edonkey_plugin::loadServerMet(const char * serverMetUrl) {
+    void edonkey_plugin::connect(){
+	
+    }
+    
+    void edonkey_plugin::loadServerMet(const std::string & serverMetUrl) {
         std::istream * serverMetStream = NULL;
         
         if (boost::starts_with(serverMetUrl,"file:")) {
-            serverMetStream = new std::ifstream(serverMetUrl + 5, std::ios::in|std::ios::binary);
+            serverMetStream = new std::ifstream(serverMetUrl.substr(5), std::ios::in|std::ios::binary);
         }
         
         if (serverMetStream) {

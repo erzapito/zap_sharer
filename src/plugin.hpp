@@ -11,6 +11,7 @@ public:
     virtual ~plugin() {};
     virtual const std::string & getName() = 0;
     virtual const std::vector<std::string> & listActions() = 0;
+    virtual void executeAction(const std::string & action) = 0;
 };
 
 }

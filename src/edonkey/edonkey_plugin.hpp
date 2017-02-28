@@ -17,17 +17,18 @@ public:
     edonkey_plugin& operator=(const edonkey_plugin&) = delete;
     virtual ~edonkey_plugin();
     
-    std::string & getName();
-    std::vector<std::string> & listActions();
+    const std::string & getName();
+    const std::vector<std::string> & listActions();
+    void executeAction(const std::string & action);
     
-    void loadServerMet(const char * serverMetUrl);
+    void loadServerMet(const std::string & serverMetUrl);
     const std::vector<server_info> & listServers() const;
     
     void addServer(server_info & info);
     
 private:
-    std::string name;
-    std::vector<std::string> actions;
+    void connect();
+
     std::vector<server_info> servers;
     
     edonkey_db db;
