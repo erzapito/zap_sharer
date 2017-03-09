@@ -13,7 +13,7 @@ namespace zap {
 namespace sharer {
 namespace edonkey {
 
-    edonkey_plugin::edonkey_plugin(zap::sharer::db_wrapper * _db):
+    edonkey_plugin::edonkey_plugin(std::shared_ptr<zap::sharer::db_wrapper> _db):
     db(_db)
     {
 	db.loadServerList(servers);

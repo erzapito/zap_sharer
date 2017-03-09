@@ -75,12 +75,9 @@ BOOST_AUTO_TEST_CASE( plugin_request_handler__handle_request__plugin_listing__em
 
 BOOST_AUTO_TEST_CASE( plugin_request_handler__handle_request__plugin_listing__non_empty) {
 TEST_LOG("::plugin_request_handler__handle_request__plugin_listing__non_empty");
-    plugin * p1 = new dummy_plugin("p1");
-    plugin * p2 = new dummy_plugin("p2");
-    
     zap::sharer::plugin_manager m;
-    m.addPlugin(p1);
-    m.addPlugin(p2);
+    m.addPlugin(std::unique_ptr<dummy_plugin>(new dummy_plugin("p1")));
+    m.addPlugin(std::unique_ptr<dummy_plugin>(new dummy_plugin("p2")));
     plugin_request_handler h (m);
     reply _r;
     bool res;
@@ -98,12 +95,10 @@ TEST_LOG("::plugin_request_handler__handle_request__plugin_listing__non_empty");
 
 BOOST_AUTO_TEST_CASE( plugin_request_handler__handle_request__plugin_actions__not_found) {
 TEST_LOG("::plugin_request_handler__handle_request__plugin_actions__not_found");
-    plugin * p1 = new dummy_plugin("p1");
-    plugin * p2 = new dummy_plugin("p2");
     
     zap::sharer::plugin_manager m;
-    m.addPlugin(p1);
-    m.addPlugin(p2);
+    m.addPlugin(std::unique_ptr<dummy_plugin>(new dummy_plugin("p1")));
+    m.addPlugin(std::unique_ptr<dummy_plugin>(new dummy_plugin("p2")));
     
     plugin_request_handler h (m);
     reply _r;
@@ -116,12 +111,10 @@ TEST_LOG("::plugin_request_handler__handle_request__plugin_actions__not_found");
 
 BOOST_AUTO_TEST_CASE( plugin_request_handler__handle_request__plugin_actions__empty) {
 TEST_LOG("::plugin_request_handler__handle_request__plugin_actions__empty");
-    plugin * p1 = new dummy_plugin("p1");
-    plugin * p2 = new dummy_plugin("p2");
     
     zap::sharer::plugin_manager m;
-    m.addPlugin(p1);
-    m.addPlugin(p2);
+    m.addPlugin(std::unique_ptr<dummy_plugin>(new dummy_plugin("p1")));
+    m.addPlugin(std::unique_ptr<dummy_plugin>(new dummy_plugin("p2")));
     
     plugin_request_handler h (m);
     reply _r;
@@ -140,12 +133,10 @@ TEST_LOG("::plugin_request_handler__handle_request__plugin_actions__empty");
 
 BOOST_AUTO_TEST_CASE( plugin_request_handler__handle_request__plugin_actions__non_empty) {
 TEST_LOG("::plugin_request_handler__handle_request__plugin_actions__non_empty");
-    plugin * p1 = new dummy_plugin("p1","act1","act2");
-    plugin * p2 = new dummy_plugin("p2");
     
     zap::sharer::plugin_manager m;
-    m.addPlugin(p1);
-    m.addPlugin(p2);
+    m.addPlugin(std::unique_ptr<dummy_plugin>(new dummy_plugin("p1")));
+    m.addPlugin(std::unique_ptr<dummy_plugin>(new dummy_plugin("p2")));
     
     plugin_request_handler h (m);
     reply _r;
@@ -164,12 +155,10 @@ TEST_LOG("::plugin_request_handler__handle_request__plugin_actions__non_empty");
 
 BOOST_AUTO_TEST_CASE( plugin_request_handler__handle_request__wrong_request) {
 TEST_LOG("::plugin_request_handler__handle_request__wrong_request");
-    plugin * p1 = new dummy_plugin("p1","act1","act2");
-    plugin * p2 = new dummy_plugin("p2");
     
     zap::sharer::plugin_manager m;
-    m.addPlugin(p1);
-    m.addPlugin(p2);
+    m.addPlugin(std::unique_ptr<dummy_plugin>(new dummy_plugin("p1")));
+    m.addPlugin(std::unique_ptr<dummy_plugin>(new dummy_plugin("p2")));
     
     plugin_request_handler h (m);
     reply _r;

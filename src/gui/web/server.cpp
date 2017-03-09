@@ -26,16 +26,13 @@ answer_to_connection (void *cls, struct MHD_Connection *connection,
 server::server(zap::sharer::plugin_manager & plugin_manager_)
   : plugin_manager(plugin_manager_)
 {
-  request_handlers.push_back(new static_request_handler("./extra/") );
-  request_handlers.push_back(new plugin_request_handler(plugin_manager_) );
-  request_handlers.push_back(new notfound_request_handler() );
+  request_handlers.push_back(std::unique_ptr<request_handler>(new static_request_handler("./extra/")) );
+  request_handlers.push_back(std::unique_ptr<request_handler>(new plugin_request_handler(plugin_manager_)) );
+  request_handlers.push_back(std::unique_ptr<request_handler>(new notfound_request_handler()) );
 }
 
 server::~server() {
 	stop();
-	for (request_handler * h : request_handlers) {
-		delete h;
-	}
 }
 
 void server::configure(const std::string& _address, const std::string& _port) {
@@ -63,7 +60,7 @@ int server::processRequest (struct MHD_Connection *connection,
   request request_ (method, version, url, upload_data, *upload_data_size);
   reply reply_;
 
-  for (request_handler * h : request_handlers) {
+  for (const std::unique_ptr<request_handler> & h : request_handlers) {
 	  if (h->handle_request(request_, reply_)) {
 		  break;
 	  }

@@ -12,10 +12,10 @@ static boost::log::sources::severity_logger< severity_level > _logger;
 namespace zap {
     namespace sharer {
 
-        db_wrapper_sqlite3::db_wrapper_sqlite3(const char* name) {
+        db_wrapper_sqlite3::db_wrapper_sqlite3(const std::string & name) {
             int rc;
 
-            rc = sqlite3_open(name, &db);
+            rc = sqlite3_open(name.c_str(), &db);
             if( rc ){
             	BOOST_LOG_SEV(_logger ,error) << "db_wrapper_sqlite3 open error: " << rc;
             }
@@ -44,7 +44,7 @@ namespace zap {
             return result;
         }
         
-        std::map<std::string,std::string> db_wrapper_sqlite3::listTableFields(const char* table) {
+        std::map<std::string,std::string> db_wrapper_sqlite3::listTableFields(const std::string & table) {
             std::map<std::string, std::string> result;
             
             int rc;
@@ -72,17 +72,17 @@ namespace zap {
             return result;
         }
 
-		db_cursor * db_wrapper_sqlite3::query(const char* sql) {
+		std::unique_ptr<db_cursor> db_wrapper_sqlite3::query(const std::string & sql) {
             int rc;
             sqlite3_stmt *stmt;
-            rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
+            rc = sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, NULL);
             if (rc != SQLITE_OK) {
 				std::stringstream msg;
 				msg << "db_wrapper_sqlite3::queryScalarInt prep error: " << sqlite3_errmsg(db);
                 BOOST_LOG_SEV(_logger,error) << msg.str();
 				throw std::runtime_error(msg.str());
             }
-			return new db_cursor_sqlite3(db, stmt);
+			return std::unique_ptr<db_cursor>(new db_cursor_sqlite3(db, stmt));
         }
         
 		db_cursor_sqlite3::db_cursor_sqlite3 (sqlite3 * _db, sqlite3_stmt * _stmt): db(_db), stmt(_stmt) {};
@@ -102,8 +102,9 @@ namespace zap {
 			return rc == SQLITE_ROW;
 		}
 
-		const char * db_cursor_sqlite3::getStringColumn(int c) {
-			return reinterpret_cast<const char*>(sqlite3_column_text(stmt,c));
+		std::string db_cursor_sqlite3::getStringColumn(int c) {
+			std::string v ( reinterpret_cast<const char*>(sqlite3_column_text(stmt,c)) );
+			return v;
 		}
 
 		int db_cursor_sqlite3::getIntColumn(int c) {
@@ -115,8 +116,8 @@ namespace zap {
 			return sqlite3_changes(db);
 		};
 
-		void db_cursor_sqlite3::bind(int pos, const char * v) {
-			sqlite3_bind_text(stmt, pos + 1, v, -1, SQLITE_STATIC);
+		void db_cursor_sqlite3::bind(int pos, const std::string & v) {
+			sqlite3_bind_text(stmt, pos + 1, v.c_str(), -1, SQLITE_STATIC);
 		};
 
 		void db_cursor_sqlite3::bind(int pos, int v) {

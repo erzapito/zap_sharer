@@ -9,10 +9,10 @@ namespace sharer {
 namespace gui {
 namespace web {
 
-request::request (const char * _method,
-	const char * version,
-	const char * url,
-	const char * _content,
+request::request (const std::string & _method,
+	const std::string & version,
+	const std::string & url,
+	const std::string & _content,
     const size_t & content_size)
 :
 method(_method),

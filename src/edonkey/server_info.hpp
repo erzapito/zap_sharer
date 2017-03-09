@@ -30,7 +30,7 @@ namespace zap {
             class server_info {
             public:
                 server_info();
-                server_info(int id, const char * n, const char * d, uint32_t ip, uint16_t port);
+                server_info(int id, const std::string & n, const std::string & d, uint32_t ip, uint16_t port);
                 ~server_info();
 
 		int id;

@@ -12,7 +12,7 @@ public:
 	notfound_request_handler();
 	virtual ~notfound_request_handler() ;
 
-	bool handle_request(const request& req, reply& rep);
+	bool handle_request(const request& req, reply& rep) override;
 };
 
 }

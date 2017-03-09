@@ -14,10 +14,10 @@ class request
 {
 public:
   request();
-  request (const char * method,
-	const char * version,
-	const char * url,
-	const char * content,
+  request (const std::string & method,
+	const std::string & version,
+	const std::string & url,
+	const std::string & content,
     const size_t & content_size);
 
   const std::string & getRequestPath() const {

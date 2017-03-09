@@ -4,6 +4,7 @@
 #include <vector>
 #include <string>
 #include <unordered_map>
+#include <memory>
 
 namespace zap {
 namespace sharer {
@@ -18,10 +19,10 @@ public:
     const std::vector<std::string> & listPluginNames();
     plugin * getPluginByShortName(const std::string & name);
     
-    void addPlugin(plugin * p);
+    void addPlugin(std::unique_ptr<plugin> p);
 private:
     std::vector<std::string> currentPluginNames;
-    std::unordered_map< std::string , plugin * > plugins;
+    std::unordered_map< std::string , std::unique_ptr<plugin> > plugins;
 };
 
 }

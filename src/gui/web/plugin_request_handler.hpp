@@ -16,7 +16,7 @@ public:
 	plugin_request_handler& operator=(const plugin_request_handler&) = delete;
 	virtual ~plugin_request_handler() ;
 
-	bool handle_request(const request& req, reply& rep);
+	bool handle_request(const request& req, reply& rep) override;
 private:
 	zap::sharer::plugin_manager & plugin_manager;
 };

@@ -58,12 +58,12 @@ BOOST_AUTO_TEST_CASE( plugin_manager__listPluginNames__empty )
 BOOST_AUTO_TEST_CASE( plugin_manager__listPluginNames__non_empty )
 {
   TEST_LOG("::plugin_manager__listPluginNames__non_empty");
-    plugin * p1 = new dummy_plugin("p1");
-    plugin * p2 = new dummy_plugin("p2");
     
     zap::sharer::plugin_manager manager;
-    manager.addPlugin(p1);
-    manager.addPlugin(p2);
+    manager.addPlugin(std::unique_ptr<dummy_plugin>(new dummy_plugin("p1")));
+    manager.addPlugin(std::unique_ptr<dummy_plugin>(new dummy_plugin("p2")));
+
+    
     auto & names = manager.listPluginNames();
     BOOST_CHECK_EQUAL(2, names.size());
     BOOST_CHECK_EQUAL("p1",names[0]);
@@ -73,17 +73,15 @@ BOOST_AUTO_TEST_CASE( plugin_manager__listPluginNames__non_empty )
 BOOST_AUTO_TEST_CASE( plugin_manager__getPluginByShortName__non_empty )
 {
   TEST_LOG("::plugin_manager__getPluginByShortName__non_empty");
-    plugin * p1 = new dummy_plugin("p1");
-    plugin * p2 = new dummy_plugin("p2");
     
     zap::sharer::plugin_manager manager;
-    manager.addPlugin(p1);
-    manager.addPlugin(p2);
-    
+    manager.addPlugin(std::unique_ptr<dummy_plugin>(new dummy_plugin("p1")));
+    manager.addPlugin(std::unique_ptr<dummy_plugin>(new dummy_plugin("p2")));
     zap::sharer::plugin * p = manager.getPluginByShortName("test");
     BOOST_CHECK_MESSAGE(p == NULL, "plugin should be null");
-    BOOST_CHECK(p1 == manager.getPluginByShortName("p1"));
+    BOOST_FAIL("FIX: check against name");
+    /*BOOST_CHECK(p1 == manager.getPluginByShortName("p1"));
     BOOST_CHECK(p2 != manager.getPluginByShortName("p1"));
     BOOST_CHECK(p2 == manager.getPluginByShortName("p2"));
-    BOOST_CHECK(NULL == manager.getPluginByShortName("p3"));
+    BOOST_CHECK(NULL == manager.getPluginByShortName("p3"));*/
 }

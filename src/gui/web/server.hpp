@@ -43,7 +43,7 @@ private:
   std::string port;
 
   /// The handler for all incoming requests.
-  std::vector<request_handler *> request_handlers;
+  std::vector<std::unique_ptr<request_handler>> request_handlers;
 
   zap::sharer::plugin_manager & plugin_manager;
 

@@ -11,7 +11,7 @@ namespace zap {
     namespace sharer {
         namespace edonkey {
             
-            edonkey_db::edonkey_db(zap::sharer::db_wrapper * _db): db(_db) {
+            edonkey_db::edonkey_db(std::shared_ptr<zap::sharer::db_wrapper> _db): db(_db) {
                 int version = getCurrentVersion();
                 if (version) {
                     update(version, edonkey_db::VERSION);
@@ -20,7 +20,7 @@ namespace zap {
                 }
             }
             
-            edonkey_db::edonkey_db(zap::sharer::db_wrapper * _db, int version): db(_db) {
+            edonkey_db::edonkey_db(std::shared_ptr<zap::sharer::db_wrapper> _db, int version): db(_db) {
 				
                 int currentVersion = getCurrentVersion();
                 /*
@@ -44,10 +44,9 @@ namespace zap {
 				if(std::find(tables.begin(), tables.end(), "edonkey_option") != tables.end()) {
 					auto result = db->query("SELECT value FROM edonkey_option WHERE name='db_version';");
 					if (result->next()) {
-						const char * versionStr = result->getStringColumn(0);
-						v = atoi(versionStr);
+						auto versionStr = result->getStringColumn(0);
+						v = atoi(versionStr.c_str());
 					}
-					delete result;
 				}
 				return v;
             }
@@ -99,7 +98,6 @@ namespace zap {
 				cursor->bind(2,i.ip);
 				cursor->bind(3,i.port);
 				cursor->execute();
-				delete cursor;
 			}
 
 	 		void edonkey_db::updateServerInfo(const server_info &i) {
@@ -110,20 +108,18 @@ namespace zap {
 				cursor->bind(3,i.port);
 				cursor->bind(4,i.id);
 				cursor->execute();
-				delete cursor;
 			}
 
 	 		void edonkey_db::loadServerList(std::vector<server_info> & l) {
 	 			auto cursor = db->query("SELECT id,name,description,ip,port from edonkey_server");
 	 			while (cursor->next()) {
 	 				int id = cursor->getIntColumn(0);
-	 				const char * name = cursor->getStringColumn(1);
-	 				const char * description = cursor->getStringColumn(2);
+	 				std::string name = cursor->getStringColumn(1);
+	 				std::string description = cursor->getStringColumn(2);
 	 				int ip = cursor->getIntColumn(3);
 	 				int port = cursor->getIntColumn(4);
 	 				l.push_back(server_info(id,name,description,ip,port));
 	 			}
-	 			delete cursor;
 	 		}
 
         }

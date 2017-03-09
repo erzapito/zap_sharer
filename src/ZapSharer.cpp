@@ -17,9 +17,9 @@ ZapSharer::~ZapSharer() {
 
 void ZapSharer::run() {
 	zap::sharer::plugin_manager plugin_manager;
-        zap::sharer::db_wrapper_sqlite3 db ("zapsharer");
-        zap::sharer::edonkey::edonkey_plugin * donkey_plugin = new zap::sharer::edonkey::edonkey_plugin(&db);
-        plugin_manager.addPlugin(donkey_plugin);
+        std::shared_ptr<zap::sharer::db_wrapper> db (new zap::sharer::db_wrapper_sqlite3("zapsharer"));
+        std::unique_ptr<zap::sharer::edonkey::edonkey_plugin> donkey_plugin ( new zap::sharer::edonkey::edonkey_plugin(db) );
+        plugin_manager.addPlugin(std::move(donkey_plugin));
 
 	zap::sharer::gui::web::server s (plugin_manager);
 	s.configure("0.0.0.0","9999");

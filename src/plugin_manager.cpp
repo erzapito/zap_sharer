@@ -8,9 +8,7 @@ plugin_manager::plugin_manager() {
 }
 
 plugin_manager::~plugin_manager() {
-	for (auto & p : plugins ) {
-      delete p.second;
-    }
+
 }
 
 const std::vector<std::string> & plugin_manager::listPluginNames() {
@@ -18,13 +16,13 @@ const std::vector<std::string> & plugin_manager::listPluginNames() {
 }
 
 plugin * plugin_manager::getPluginByShortName(const std::string & n) {
-	return plugins[n];
+	return plugins[n].get();
 }
 
-void plugin_manager::addPlugin(plugin * p) {
+void plugin_manager::addPlugin(std::unique_ptr<plugin> p) {
     std::string name = p->getName();
     currentPluginNames.push_back(name);
-    plugins[name] = p;
+    plugins[name] = std::move(p);
 }
 
 }
